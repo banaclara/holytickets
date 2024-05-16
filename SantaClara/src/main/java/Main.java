@@ -24,7 +24,9 @@ public class Main {
                 System.out.println("1. Inserir espetáculo");
                 System.out.println("2. Excluir espetáculo");
                 System.out.println("3. Alterar espetáculo");
-                System.out.println("4. Sair");
+                System.out.println("4. Listar espetáculos");
+                System.out.println("5. Pesquisar espetáculo por nome");
+                System.out.println("6. Sair");
 
                 int opcao = scanner.nextInt();
                 scanner.nextLine();
@@ -40,6 +42,12 @@ public class Main {
                         OperacoesEspetaculo.alterarEspetaculo(scanner, repositorio);
                         break;
                     case 4:
+                        OperacoesEspetaculo.listarEspetaculos(repositorio);
+                        break;
+                    case 5:
+                        OperacoesEspetaculo.pesquisarEspetaculoPorNome(scanner, repositorio);
+                        break;
+                    case 6:
                         System.out.println("Encerrando o programa...");
                         connection.close();
                         scanner.close();

@@ -85,6 +85,27 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
         }
         return null;
     }
+    public List<Espetaculo> buscarPorNome(String nome) {
+        List<Espetaculo> espetaculos = new ArrayList<>();
+        String sql = "SELECT * FROM espetaculos WHERE titulo LIKE ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + nome + "%");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Espetaculo espetaculo = new Espetaculo(
+                        resultSet.getInt("id"),
+                        resultSet.getString("titulo"),
+                        resultSet.getString("diretor"),
+                        resultSet.getString("elenco"),
+                        resultSet.getString("descricao")
+                );
+                espetaculos.add(espetaculo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar os espetáculos por nome: " + e.getMessage());
+        }
+        return espetaculos;
+    }
 
     @Override
     public List<Espetaculo> buscarTodos() {

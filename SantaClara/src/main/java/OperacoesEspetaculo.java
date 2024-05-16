@@ -94,4 +94,38 @@ public class OperacoesEspetaculo {
 
         System.out.println("Espetáculo alterado com sucesso!");
     }
+    public static void listarEspetaculos(EspetaculoRepositorio repositorio) {
+        System.out.println("Lista de Espetáculos:");
+
+        List<Espetaculo> todosEspetaculos = repositorio.buscarTodos();
+        if (todosEspetaculos.isEmpty()) {
+            System.out.println("Não há espetáculos cadastrados.");
+        } else {
+            for (Espetaculo espetaculo : todosEspetaculos) {
+                System.out.println("ID: " + espetaculo.getId() + ", Título: " + espetaculo.getTitulo());
+            }
+        }
+    }
+    public static void pesquisarEspetaculoPorNome(Scanner scanner, EspetaculoRepositorio repositorio) {
+        System.out.println("Pesquisar espetáculo por nome:");
+        System.out.println("Digite o nome do espetáculo:");
+        String nome = scanner.nextLine();
+
+        List<Espetaculo> espetaculosEncontrados = repositorio.buscarPorNome(nome);
+
+        if (espetaculosEncontrados.isEmpty()) {
+            System.out.println("Nenhum espetáculo encontrado com o nome informado.");
+        } else {
+            System.out.println("Espetáculo(s) encontrado(s):");
+            for (Espetaculo espetaculo : espetaculosEncontrados) {
+                System.out.println("ID: " + espetaculo.getId());
+                System.out.println("Título: " + espetaculo.getTitulo());
+                System.out.println("Diretor: " + espetaculo.getDiretor());
+                System.out.println("Elenco: " + espetaculo.getElenco());
+                System.out.println("Descrição: " + espetaculo.getDescricao());
+                System.out.println("--------------------------");
+            }
+        }
+    }
+
 }
