@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://DESKTOP-SEUPC\\SEUBD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=SENHA;encrypt=false;";
+    private static final String URL = "jdbc:sqlserver://DESKTOP-SEUPC\\NOMECONEXAO:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=SENHA;encrypt=false;";
 
     public static void main(String[] args) {
         try {
