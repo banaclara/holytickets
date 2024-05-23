@@ -5,11 +5,24 @@ import java.sql.Date;
 public class Programacao extends HolyTickets {
     private int espetaculoID;
     private Date dataExibicao;
+    String tituloEspetaculo;
 
     public Programacao(int id, Date dataExibicao, int espetaculoID) {
         super(id);
         this.dataExibicao = dataExibicao;
         this.espetaculoID = espetaculoID;
+    }
+
+    public Programacao(Date dataExibicao, String titulo) {
+        super();
+        this.dataExibicao = dataExibicao;
+        this.tituloEspetaculo = titulo;
+    }
+
+    public Programacao(int id, Date dataExibicao,String titulo) {
+        super(id);
+        this.dataExibicao = dataExibicao;
+        this.tituloEspetaculo = titulo;
     }
 
     public int getEspetaculoID() {
@@ -18,5 +31,9 @@ public class Programacao extends HolyTickets {
 
     public Date getDataExibicao() {
         return dataExibicao;
+    }
+
+    public String getTituloEspetaculo() {
+        return tituloEspetaculo;
     }
 }

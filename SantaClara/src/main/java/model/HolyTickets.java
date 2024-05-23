@@ -7,6 +7,8 @@ public abstract class HolyTickets {
         this.id = id;
     }
 
+    public HolyTickets() {}
+
     public int getId() {
         return id;
     }

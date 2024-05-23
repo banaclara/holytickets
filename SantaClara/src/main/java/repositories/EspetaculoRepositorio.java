@@ -56,50 +56,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
             System.out.println("Erro ao excluir o espetáculo: " + e.getMessage());
         }
     }
-    //Método de atualizar que vamos usar nas Operações(a definir)
-    @Override
-    public void atualizar(Espetaculo entidade) {
-        //UPDATE executa a atualização dos dados no BD
-        String sql = "UPDATE espetaculos SET titulo = ?, diretor = ?, elenco = ?, descricao = ? WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, entidade.getTitulo());
-            statement.setString(2, entidade.getDiretor());
-            statement.setString(3, entidade.getElenco());
-            statement.setString(4, entidade.getDescricao());
-            statement.setInt(5, entidade.getId());
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Espetáculo atualizado com sucesso!");
-            } else {
-                System.out.println("Espetáculo não encontrado.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao atualizar o espetáculo: " + e.getMessage());
-        }
-    }
-    // Busca por ID(a definir)
-    @Override
-    public Espetaculo buscarPorId(int id) {
-        // SELECT executa a busca no BD após a definição do ID
-        String sql = "SELECT * FROM espetaculos WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            //ResultSet processa a busca
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return new Espetaculo(
-                        resultSet.getInt("id"),
-                        resultSet.getString("titulo"),
-                        resultSet.getString("diretor"),
-                        resultSet.getString("elenco"),
-                        resultSet.getString("descricao")
-                );
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao buscar o espetáculo por ID: " + e.getMessage());
-        }
-        return null;
-    }
+
     //Busca por nome que vamos usar nas Operações (a definir)
     public List<Espetaculo> buscarPorNome(String nome) {
         List<Espetaculo> espetaculos = new ArrayList<>();
@@ -148,27 +105,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
         return espetaculos;
     }
     // Método teste para pesquisar data (a definir)
-    public List<Espetaculo> buscarPorDataExibicao(LocalDate dataExibicao) {
-        List<Espetaculo> espetaculos = new ArrayList<>();
-        String sql = "SELECT * FROM espetaculos WHERE data_exibicao = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setDate(1, java.sql.Date.valueOf(dataExibicao));
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Espetaculo espetaculo = new Espetaculo(
-                        resultSet.getInt("id"),
-                        resultSet.getString("titulo"),
-                        resultSet.getString("diretor"),
-                        resultSet.getString("elenco"),
-                        resultSet.getString("descricao")
-                );
-                espetaculos.add(espetaculo);
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao buscar os espetáculos por data de exibição: " + e.getMessage());
-        }
-        return espetaculos;
-    }
+
     //Define um novo titulo no BD
     public void alterarTitulo(int id, String novoTitulo) {
         String sql = "UPDATE espetaculos SET titulo = ? WHERE id = ?";

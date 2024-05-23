@@ -56,7 +56,6 @@ public class OperacoesEspetaculo {
     //Método para alteração de um espetaculo dentro do BD
     public static void alterarEspetaculo(Scanner scanner, EspetaculoRepositorio repositorio) {
         System.out.println("Alterar espetáculo:");
-
         // Lista todos os espetáculos
         List<Espetaculo> todosEspetaculos = repositorio.buscarTodos();
         System.out.println("Espetáculos disponíveis para alteração:");
@@ -106,7 +105,6 @@ public class OperacoesEspetaculo {
                 System.out.println("Opção inválida. Nenhuma alteração realizada.");
                 return;
         }
-
         System.out.println("Espetáculo alterado com sucesso!");
     }
     // Método para listar os espetaculos criados no BD
