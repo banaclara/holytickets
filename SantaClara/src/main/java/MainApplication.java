@@ -1,4 +1,3 @@
-import model.Espetaculo;
 import operations.OperacoesProgramacao;
 import repositories.EspetaculoRepositorio;
 import operations.OperacoesEspetaculo;
@@ -11,7 +10,7 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://DESKTOP-pc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=SENHA;encrypt=false;";
+    private static final String URL = "jdbc:sqlserver://DESKTOP-5AIMLEU\\SQLSVE:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=abc123;encrypt=false;";
 
     public static void main(String[] args) {
         try {
@@ -35,7 +34,7 @@ public class MainApplication {
                 switch (opt) {
                     case 1:
                         do {
-                            menuEspetaculos(connection, scanner, espetaculoRepositorio);
+                            menuEspetaculos(scanner, espetaculoRepositorio);
                             System.out.println("0 - Voltar ao menu principal");
                             System.out.println("Qualquer outro número para continuar no menu de espetáculos.");
                             voltar = scanner.nextInt();
@@ -45,7 +44,7 @@ public class MainApplication {
                         break;
                     case 3:
                         do {
-                            menuProgramacao(connection, scanner, programacaoRepositorio);
+                            menuProgramacao(scanner, programacaoRepositorio, espetaculoRepositorio);
                             System.out.println("0 - Voltar ao menu principal");
                             System.out.println("Qualquer outro número para continuar no menu de programação.");
                             voltar = scanner.nextInt();
@@ -72,7 +71,7 @@ public class MainApplication {
         System.out.println("4 - Sair do programa");
     }
 
-    public static void menuEspetaculos(Connection connection, Scanner scanner, EspetaculoRepositorio repositorio) {
+    public static void menuEspetaculos(Scanner scanner, EspetaculoRepositorio repositorio) {
         System.out.println("Escolha uma opção:");
         System.out.println("1. Inserir espetáculo");
         System.out.println("2. Excluir espetáculo");
@@ -104,11 +103,11 @@ public class MainApplication {
         }
     }
 
-    public static void menuProgramacao(Connection connection, Scanner scanner, ProgramacaoRepositorio repositorio) {
+    public static void menuProgramacao(Scanner scanner, ProgramacaoRepositorio pRepositorio, EspetaculoRepositorio eRepositorio) {
         System.out.println("Escolha uma opção:");
-        System.out.println("1. Inserir programação");
-        System.out.println("2. Pesquisar programação");
-        System.out.println("3. Adicionar data de exibição a um espetáculo");
+        System.out.println("1. Adicionar data de exibição a um espetáculo");
+        System.out.println("2. Pesquisar programação mensal");
+        System.out.println("3. Cancelar data de exibição");
         System.out.println("4. Remover programação");
 
         int opcao = scanner.nextInt();
@@ -116,16 +115,16 @@ public class MainApplication {
 
         switch (opcao) {
             case 1:
-                OperacoesProgramacao.inserirProg(scanner, repositorio);
+                OperacoesProgramacao.inserirProgramacao(scanner, pRepositorio, eRepositorio);
                 break;
             case 2:
-                OperacoesProgramacao.pesquisarProgMensal(scanner, repositorio);
+                OperacoesProgramacao.pesquisarProgramacaoMensal(scanner, pRepositorio);
                 break;
             case 3:
-//                OperacoesEspetaculo.alterarEspetaculo(scanner, repositorio);
+//                Op
                 break;
             case 4:
-                OperacoesProgramacao.excluirProg(scanner, repositorio);
+                OperacoesProgramacao.excluirProg(scanner, pRepositorio);
                 break;
             default:
                 System.out.println("Opção inválida. Tente novamente.");

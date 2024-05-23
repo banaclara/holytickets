@@ -1,18 +1,19 @@
 package operations;
 
 import model.Programacao;
+import repositories.EspetaculoRepositorio;
 import repositories.ProgramacaoRepositorio;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
 public class OperacoesProgramacao {
 
-    public static void inserirProg(Scanner scanner, ProgramacaoRepositorio repositorio) {
+    public static void inserirProgramacao(Scanner scanner, ProgramacaoRepositorio repositorio, EspetaculoRepositorio espetaculoRepositorio) {
         System.out.println("Registrar espetáculo em uma data:");
 
-        System.out.println("Espetáculo:");
+        OperacoesEspetaculo.listarEspetaculos(espetaculoRepositorio);
+        System.out.println("ID do espetáculo:");
         int espetaculo = scanner.nextInt();
 
         System.out.println("Data de exibição:");
@@ -25,24 +26,28 @@ public class OperacoesProgramacao {
         System.out.println("Programação atualizada com sucesso!");
     }
 
-    public static void pesquisarProgMensal(Scanner scanner, ProgramacaoRepositorio repositorio) {
+    public static void pesquisarProgramacaoMensal(Scanner scanner, ProgramacaoRepositorio repositorio) {
         System.out.println("Pesquisar programação por mês:");
         System.out.println("Digite o mês:"); // 01 janeiro, 02 fevereiro ... 12 dezembro
         int mes = scanner.nextInt();
-        // Pega o metodo criado no repositorio
-        List<Programacao> progDoMes = repositorio.progMensal(mes);
-        // Cria uma exceção caso o nome do espetaculo não esteja presente no BD
+        System.out.println("E o ano:");
+        int ano = scanner.nextInt();
+        List<Programacao> progDoMes = repositorio.programacaoMensal(mes, ano);
         if (progDoMes.isEmpty()) {
-            System.out.println("Nenhum espetáculo encontrado com o nome informado.");
+            System.out.println("Nada programado para esse mês.");
         } else {
-            // Apresenta as informações completas do espetaculo
-            System.out.println("Espetáculo(s) encontrado(s):");
+            System.out.println("Programação mensal " + mes + "/" + ano + ":");
+            String tituloAtual = ""; // para o controle de exibição do título do espetáculo
             for (Programacao programacao : progDoMes) {
-                System.out.println("ID: " + programacao.getId());
-                System.out.println("Título: " + programacao.getDataExibicao());
-                System.out.println("Diretor: " + programacao.getEspetaculoID());
-                System.out.println("--------------------------");
+                if (!programacao.getTituloEspetaculo().equals(tituloAtual)) { // faz com que o título só apareça se for diferente do que foi exibido por último e a programação seja organizada semanalmente já que cada espetáculo fica em cartaz por pelo menos 1 final de semana
+                    tituloAtual = programacao.getTituloEspetaculo(); // atualiza o título atual
+                    System.out.println("--------------------------");
+                    System.out.println("Espetáculo: " + tituloAtual);
+                    System.out.println("Datas em exibição:");
+                }
+                System.out.println(programacao.getDataExibicao());
             }
+            System.out.println("--------------------------");
         }
     }
 
