@@ -1,3 +1,4 @@
+/*import model.Assentos;
 import model.Espetaculo;
 import operations.OperacoesProgramacao;
 import repositories.EspetaculoRepositorio;
@@ -6,15 +7,20 @@ import repositories.ProgramacaoRepositorio;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.SQLException;*/
+
 import java.util.Scanner;
+
+import model.AssentoCamarote;
+import model.AssentoNormal;
+import model.Assentos;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://DESKTOP-pc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=SENHA;encrypt=false;";
+    //private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatrosc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=Porra123;encrypt=false;";
 
     public static void main(String[] args) {
-        try {
+        /*try {
             System.setProperty("java.library.path", "SantaClara/lib/mssql-jdbc_auth-12.6.1.x64.dll");
 
             System.out.println("Iniciando a conexão com o banco de dados...");
@@ -56,6 +62,7 @@ public class MainApplication {
                         connection.close();
                         scanner.close();
                         return;
+
                     default:
                         System.out.println("Opção inválida. Tente novamente.");
                 }
@@ -129,6 +136,10 @@ public class MainApplication {
                 break;
             default:
                 System.out.println("Opção inválida. Tente novamente.");
-        }
+        }*/
+        Scanner sc = new Scanner(System.in);
+        AssentoCamarote a = new AssentoCamarote();
+        a.imprimir();
     }
+
 }
