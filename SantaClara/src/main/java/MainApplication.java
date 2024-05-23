@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://DESKTOP-5AIMLEU\\SQLSVE:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=abc123;encrypt=false;";
+    private static final String URL = "jdbc:sqlserver://DESKTOP-pc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=##;encrypt=false;";
 
     public static void main(String[] args) {
         try {
@@ -33,22 +33,12 @@ public class MainApplication {
 
                 switch (opt) {
                     case 1:
-                        do {
-                            menuEspetaculos(scanner, espetaculoRepositorio);
-                            System.out.println("0 - Voltar ao menu principal");
-                            System.out.println("Qualquer outro número para continuar no menu de espetáculos.");
-                            voltar = scanner.nextInt();
-                        } while (voltar != 0);
+                        menuEspetaculos(scanner, espetaculoRepositorio);
                     case 2:
                         // inserir menu e métodos da venda de ingressos
                         break;
                     case 3:
-                        do {
-                            menuProgramacao(scanner, programacaoRepositorio, espetaculoRepositorio);
-                            System.out.println("0 - Voltar ao menu principal");
-                            System.out.println("Qualquer outro número para continuar no menu de programação.");
-                            voltar = scanner.nextInt();
-                        } while (voltar != 0);
+                        menuProgramacao(scanner, programacaoRepositorio, espetaculoRepositorio);
                         break;
                     case 4:
                         System.out.println("Encerrando o programa...");
@@ -72,62 +62,72 @@ public class MainApplication {
     }
 
     public static void menuEspetaculos(Scanner scanner, EspetaculoRepositorio repositorio) {
-        System.out.println("Escolha uma opção:");
-        System.out.println("1. Inserir espetáculo");
-        System.out.println("2. Excluir espetáculo");
-        System.out.println("3. Alterar espetáculo");
-        System.out.println("4. Listar espetáculos");
-        System.out.println("5. Pesquisar espetáculo por nome");
+        boolean sair = false;
+        do {
+            System.out.println("Escolha uma opção:");
+            System.out.println("1. Inserir espetáculo");
+            System.out.println("2. Excluir espetáculo");
+            System.out.println("3. Alterar espetáculo");
+            System.out.println("4. Listar espetáculos");
+            System.out.println("5. Pesquisar espetáculo por nome");
+            System.out.println("0. Voltar ao menu principal");
 
-        int opcao = scanner.nextInt();
-        scanner.nextLine();
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
 
-        switch (opcao) {
-            case 1:
-                OperacoesEspetaculo.inserirEspetaculo(scanner, repositorio);
-                break;
-            case 2:
-                OperacoesEspetaculo.excluirEspetaculo(scanner, repositorio);
-                break;
-            case 3:
-                OperacoesEspetaculo.alterarEspetaculo(scanner, repositorio);
-                break;
-            case 4:
-                OperacoesEspetaculo.listarEspetaculos(repositorio);
-                break;
-            case 5:
-                OperacoesEspetaculo.pesquisarEspetaculoPorNome(scanner, repositorio);
-                break;
-            default:
-                System.out.println("Opção inválida. Tente novamente.");
-        }
+            switch (opcao) {
+                case 1:
+                    OperacoesEspetaculo.inserirEspetaculo(scanner, repositorio);
+                    break;
+                case 2:
+                    OperacoesEspetaculo.excluirEspetaculo(scanner, repositorio);
+                    break;
+                case 3:
+                    OperacoesEspetaculo.alterarEspetaculo(scanner, repositorio);
+                    break;
+                case 4:
+                    OperacoesEspetaculo.listarEspetaculos(repositorio);
+                    break;
+                case 5:
+                    OperacoesEspetaculo.pesquisarEspetaculoPorNome(scanner, repositorio);
+                    break;
+                case 0:
+                    sair = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        } while (sair == false);
     }
 
     public static void menuProgramacao(Scanner scanner, ProgramacaoRepositorio pRepositorio, EspetaculoRepositorio eRepositorio) {
-        System.out.println("Escolha uma opção:");
-        System.out.println("1. Adicionar data de exibição a um espetáculo");
-        System.out.println("2. Pesquisar programação mensal");
-        System.out.println("3. Cancelar data de exibição");
-        System.out.println("4. Remover programação");
+        boolean sair = false;
+        do {
+            System.out.println("Escolha uma opção:");
+            System.out.println("1. Adicionar data de exibição a um espetáculo");
+            System.out.println("2. Pesquisar programação mensal");
+            System.out.println("3. Cancelar data de exibição");
+            System.out.println("0. Voltar ao menu principal");
 
-        int opcao = scanner.nextInt();
-        scanner.nextLine();
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
 
-        switch (opcao) {
-            case 1:
-                OperacoesProgramacao.inserirProgramacao(scanner, pRepositorio, eRepositorio);
-                break;
-            case 2:
-                OperacoesProgramacao.pesquisarProgramacaoMensal(scanner, pRepositorio);
-                break;
-            case 3:
-//                Op
-                break;
-            case 4:
-                OperacoesProgramacao.excluirProg(scanner, pRepositorio);
-                break;
-            default:
-                System.out.println("Opção inválida. Tente novamente.");
-        }
+            switch (opcao) {
+                case 1:
+                    OperacoesProgramacao.inserirProgramacao(scanner, pRepositorio, eRepositorio);
+                    break;
+                case 2:
+                    OperacoesProgramacao.pesquisarProgramacaoMensal(scanner, pRepositorio);
+                    break;
+                case 3:
+                    OperacoesProgramacao.excluirProg(scanner, pRepositorio);
+                    break;
+                case 0:
+                    sair = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        } while (sair == false);
     }
 }
