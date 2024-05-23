@@ -19,6 +19,12 @@ public class Programacao extends HolyTickets {
         this.tituloEspetaculo = titulo;
     }
 
+    public Programacao(int id, Date dataExibicao,String titulo) {
+        super(id);
+        this.dataExibicao = dataExibicao;
+        this.tituloEspetaculo = titulo;
+    }
+
     public int getEspetaculoID() {
         return espetaculoID;
     }

@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://DESKTOP-pc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=##;encrypt=false;";
+    private static final String URL = "jdbc:sqlserver://DESKTOP-PC\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=###;encrypt=false;";
 
     public static void main(String[] args) {
         try {
@@ -106,7 +106,8 @@ public class MainApplication {
             System.out.println("Escolha uma opção:");
             System.out.println("1. Adicionar data de exibição a um espetáculo");
             System.out.println("2. Pesquisar programação mensal");
-            System.out.println("3. Cancelar data de exibição");
+            System.out.println("3. Realizar alterações nas programações");
+            System.out.println("4. Cancelar data de exibição");
             System.out.println("0. Voltar ao menu principal");
 
             int opcao = scanner.nextInt();
@@ -120,7 +121,10 @@ public class MainApplication {
                     OperacoesProgramacao.pesquisarProgramacaoMensal(scanner, pRepositorio);
                     break;
                 case 3:
-                    OperacoesProgramacao.excluirProg(scanner, pRepositorio);
+                    OperacoesProgramacao.alterarProgramacao(scanner, pRepositorio, eRepositorio);
+                    break;
+                case 4:
+                    OperacoesProgramacao.excluirProgramacao(scanner, pRepositorio);
                     break;
                 case 0:
                     sair = true;

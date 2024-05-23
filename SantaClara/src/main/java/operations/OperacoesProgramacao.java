@@ -4,6 +4,7 @@ import model.Programacao;
 import repositories.EspetaculoRepositorio;
 import repositories.ProgramacaoRepositorio;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -51,23 +52,48 @@ public class OperacoesProgramacao {
         }
     }
 
-    public static void excluirProg(Scanner scanner, ProgramacaoRepositorio repositorio) {
-        System.out.println("Excluir espetáculo:");
-
-        // Listar todos os espetáculos
+    public static void alterarProgramacao(Scanner scanner, ProgramacaoRepositorio repositorio, EspetaculoRepositorio espetaculoRepositorio) {
+        System.out.println("Atualizar programação:");
         List<Programacao> progGeral = repositorio.buscarTodos();
-        System.out.println("Espetáculos disponíveis para exclusão:");
         for (Programacao programacao : progGeral) {
-            //Exibindo os espetaculos por ID e Titulo, mas pode colocar os outros parametros
-            System.out.println("ID: " + programacao.getId() + ", Título: " + programacao.getEspetaculoID() + ", Data: " + programacao.getDataExibicao());
+            System.out.println("Espetáculo: " + programacao.getTituloEspetaculo() + ", Data de exibição: " + programacao.getDataExibicao() + " (ID: " + programacao.getId() + ")");
         }
-
-        //Exclusão a partir do ID
-        System.out.println("Digite o ID da programação que deseja excluir:");
+        System.out.println("Digite o ID da programação que deseja atualizar:");
         int id = scanner.nextInt();
         scanner.nextLine();
 
-        // Excluir do banco de dados
+        System.out.println("Selecione o campo que deseja alterar:");
+        System.out.println("1. Espetáculo");
+        System.out.println("2. Data de exibição");
+        int opt = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (opt) {
+            case 1:
+                OperacoesEspetaculo.listarEspetaculos(espetaculoRepositorio);
+                System.out.println("Digite o id do espetáculo que deseja cadastrar na data indicada anteriormente:");
+                int novoEspetaculo = scanner.nextInt();
+                repositorio.alterarEspetaculo(id, novoEspetaculo);
+                break;
+            case 2:
+                System.out.println("Digite a nova data de exibição para o espetáculo indicado anteriormente:");
+                String novaData = scanner.next();
+                repositorio.alterarData(id, java.sql.Date.valueOf(novaData));
+                break;
+        }
+    }
+
+    public static void excluirProgramacao(Scanner scanner, ProgramacaoRepositorio repositorio) {
+        System.out.println("Cancelar exibição na data:");
+        List<Programacao> progGeral = repositorio.buscarTodos();
+        for (Programacao programacao : progGeral) {
+            System.out.println("Espetáculo: " + programacao.getTituloEspetaculo() + ", Data de exibição: " + programacao.getDataExibicao() + " (ID: " + programacao.getId() + ")");
+        }
+
+        System.out.println("Digite o ID da programação que deseja cancelar:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
         repositorio.excluir(id);
 
         System.out.println("Programação cancelada com sucesso!");
