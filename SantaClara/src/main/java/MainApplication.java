@@ -17,7 +17,7 @@ import model.Assentos;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    //private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatrosc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=Porra123;encrypt=false;";
+    //private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatrosc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=####;encrypt=false;";
 
     public static void main(String[] args) {
         /*try {
