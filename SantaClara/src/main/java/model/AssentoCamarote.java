@@ -42,21 +42,18 @@ public class AssentoCamarote extends Assentos {
     };
     @Override
     public void reservar(String r){
+        Boolean disponivel = false;
         for (int i = 0; i < lugares.length; i++) {
             for (int j = 0; j < lugares.length; j++) {
                 if (r.equalsIgnoreCase(this.lugares[i][j])) {
-                    System.out.println("Deseja reservar " + this.lugares[i][j] + "? Sim(1) / Não (0)");
-                    int confirma = sc.nextInt();
-                    if (confirma == 1){
+                        disponivel = true;
                         this.lugares[i][j] = "X ";
-                        this.printLugares();
-                    }
-                    return;
-                } else {
-                    System.out.println("Assento indisponível, por favor escolha outro");
-                    return;
+
                 }
             }
+        }
+        if (!disponivel) {
+            System.out.println("Assento indisponível, por favor escolha outro");
         }
     };
 
