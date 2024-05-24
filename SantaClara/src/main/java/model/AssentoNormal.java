@@ -1,7 +1,7 @@
 package model;
 
 public class AssentoNormal extends Assentos {
-    protected TiposIngressos tipo = TiposIngressos.NORMAL;
+    protected TiposIngressos tipo = TiposIngressos.COMUM;
 
     protected String lugares[][] = new String[10][10];
 
@@ -12,7 +12,7 @@ public class AssentoNormal extends Assentos {
             for (int j = 0; j < this.lugares.length; j++) {
                 if (j == 0 || j == 9 || i == 9) {
                     this.lugares[i][j] = " X ";
-                } else{
+                } else {
                     if (i == 0) {
                         this.lugares[i][j] = "A0" + l;
                     }
@@ -71,23 +71,18 @@ public class AssentoNormal extends Assentos {
 
     @Override
     public void reservar(String r) {
+        Boolean disponivel = false;
         for (int i = 0; i < lugares.length; i++) {
             for (int j = 0; j < lugares.length; j++) {
                 if (r.equalsIgnoreCase(this.lugares[i][j])) {
-                    System.out.println("Deseja reservar " + this.lugares[i][j] + "? Sim(1) / Não (0)");
-                    int confirma = sc.nextInt();
-                    if (confirma == 1) {
-                        this.lugares[i][j] = "X ";
-                        this.printLugares();
-                    }
-                    return;
-                } else {
-                    System.out.println("Assento indisponível, por favor escolha outro");
-                    return;
+                    disponivel = true;
+                    this.lugares[i][j] = "X ";
+
                 }
             }
         }
-    }
-
-    ;
+        if (!disponivel) {
+            System.out.println("Assento indisponível, por favor escolha outro");
+        }
+    };
 }

@@ -12,8 +12,8 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://DESKTOP-5AIMLEU\\SQLSVE:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=abc123;encrypt=false;";
-
+    private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatrosc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=*****;encrypt=false;";
+    //fazer um pacote de conexão com o banco de dados, fazer um file e jogar o sql
     public static void main(String[] args) {
         try {
             System.setProperty("java.library.path", "SantaClara/lib/mssql-jdbc_auth-12.6.1.x64.dll");
@@ -32,17 +32,42 @@ public class MainApplication {
             EspetaculoRepositorio espetaculoRepositorio = new EspetaculoRepositorio(connection);
             ProgramacaoRepositorio programacaoRepositorio = new ProgramacaoRepositorio(connection);
             Scanner scanner = new Scanner(System.in);
-
+            AssentoCamarote c = new AssentoCamarote();
+            AssentoNormal n = new AssentoNormal();
             while (true) {
                 menuPrincipal();
                 int opt;
                 opt = scanner.nextInt();
-
+                boolean outro = true;
                 switch (opt) {
                     case 1:
                         menuEspetaculos(scanner, espetaculoRepositorio);
+                        break;
                     case 2:
                         // inserir menu e métodos da venda de ingressos
+                        do {
+                            System.out.println("Plateia Comum (1) ou Camarote (2)?");
+                            int resposta = scanner.nextInt();
+                            switch (resposta){
+                                case 1:
+                                    n.imprimir();
+                                    System.out.println("Qual assento deseja reservar?");
+                                    String reserva = scanner.next();
+                                    n.reservar(reserva);
+                                    System.out.println("Reservar outro?");
+                                    outro = scanner.nextBoolean();
+                                    break;
+                                case 2:
+                                    c.imprimir();
+                                    System.out.println("Qual assento deseja reservar?");
+                                    reserva = scanner.next();
+                                    c.reservar(reserva);
+                                    System.out.println("Reservar outro?");
+                                    outro = scanner.nextBoolean();
+                                    break;
+                            }
+
+                        } while (outro);
                         break;
                     case 3:
                         menuProgramacao(scanner, programacaoRepositorio, espetaculoRepositorio);
@@ -104,7 +129,7 @@ public class MainApplication {
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
-        } while (sair == false);
+        } while (!sair);
     }
 
     public static void menuProgramacao(Scanner scanner, ProgramacaoRepositorio pRepositorio, EspetaculoRepositorio eRepositorio) {
@@ -139,6 +164,6 @@ public class MainApplication {
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
-        } while (sair == false);
+        } while (!sair);
     }
 }

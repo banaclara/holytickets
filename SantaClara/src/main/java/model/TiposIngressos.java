@@ -1,6 +1,6 @@
 package model;
 
 public enum TiposIngressos {
-    NORMAL,
+    COMUM,
     CAMAROTE
 };
