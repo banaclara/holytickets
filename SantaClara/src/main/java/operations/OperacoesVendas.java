@@ -93,7 +93,7 @@ public class OperacoesVendas {
 
     public static BigDecimal valores(TipoAssentos tipoAssento) {
         if (tipoAssento == TipoAssentos.CAMAROTE) {
-            return new BigDecimal("150.00");
+            return new BigDecimal("160.00");
         } else {
             return new BigDecimal("70.00");
         }
