@@ -6,7 +6,6 @@ import repositories.IngressosRepositorio;
 import repositories.ProgramacaoRepositorio;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Scanner;
 
 public class OperacoesVendas {
@@ -38,22 +37,20 @@ public class OperacoesVendas {
             int tipoAssento = scanner.nextInt();
             switch (tipoAssento) {
                 case 1:
-                    n.imprimir();
+                    OperacoesAssentos.imprimir(n, java.sql.Date.valueOf(dataEspetaculo), TipoAssentos.COMUM, iRepositorio);
                     System.out.println("Qual assento deseja reservar?");
                     String reserva = scanner.next().toUpperCase();
-                    n.reservar(reserva);
                     Pagamento pagamento = OperacoesVendas.modoDePagamento(scanner, TipoAssentos.COMUM);
-                    iRepositorio.venderIngresso(new IngressosVendidos(pagamento, java.sql.Date.valueOf(dataEspetaculo), reserva));
+                    iRepositorio.venderIngresso(new IngressoVendido(pagamento, java.sql.Date.valueOf(dataEspetaculo), reserva));
                     System.out.println("Reservar outro?");
                     outro = scanner.nextBoolean();
                     break;
                 case 2:
-                    c.imprimir();
+                    OperacoesAssentos.imprimir(c, java.sql.Date.valueOf(dataEspetaculo), TipoAssentos.CAMAROTE, iRepositorio);
                     System.out.println("Qual assento deseja reservar?");
                     reserva = scanner.next().toUpperCase();
-                    c.reservar(reserva);
                     Pagamento pagamentoCa = OperacoesVendas.modoDePagamento(scanner, TipoAssentos.CAMAROTE);
-                    iRepositorio.venderIngresso(new IngressosVendidos(pagamentoCa, java.sql.Date.valueOf(dataEspetaculo), reserva));
+                    iRepositorio.venderIngresso(new IngressoVendido(pagamentoCa, java.sql.Date.valueOf(dataEspetaculo), reserva));
                     System.out.println("Reservar outro?");
                     outro = scanner.nextBoolean();
                     break;
@@ -96,7 +93,7 @@ public class OperacoesVendas {
 
     public static BigDecimal valores(TipoAssentos tipoAssento) {
         if (tipoAssento == TipoAssentos.CAMAROTE) {
-            return new BigDecimal("160.00");
+            return new BigDecimal("150.00");
         } else {
             return new BigDecimal("70.00");
         }

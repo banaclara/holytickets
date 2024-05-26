@@ -1,25 +1,26 @@
 package model;
 
-public class IngressoVendido {
-    String data;
-    String espetaculo;
-    TipoAssentos tipoIngresso;
-    String valor;
-    String assento;
+import java.sql.Date;
 
-    public IngressoVendido(String d, String e, TipoAssentos t, String v, String a) {
-        this.data = d;
-        this.espetaculo = e;
-        this.valor = v;
-        this.tipoIngresso = t;
-        this.assento = a;
+public class IngressoVendido extends Pagamento {
+    Date dataExibicao;
+    String assentoId;
+
+    public IngressoVendido(Pagamento p, Date d, String a) {
+        super(p.tipoIngresso, p.valor);
+        this.dataExibicao = d;
+        this.assentoId = a;
     }
 
-    public void imprimirIngresso() {
-        System.out.println(espetaculo);
-        System.out.println(data);
-        System.out.println(tipoIngresso + " R$" + valor);
-        System.out.println("Assento: " + assento);
+    public IngressoVendido() {}
+
+    public Date getDataExibicao() {
+        return dataExibicao;
     }
-    //adicionar método pra subir esass informações e criar uma linha na tabela de vendas, provavelmente deve ir em outra pasta
+
+    public String getAssentoId() {
+        return assentoId;
+    }
+
+
 }

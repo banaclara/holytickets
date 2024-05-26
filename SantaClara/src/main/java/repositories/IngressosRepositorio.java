@@ -1,11 +1,10 @@
 package repositories;
 
-import model.IngressosVendidos;
+import model.IngressoVendido;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IngressosRepositorio {
     private Connection connection;
@@ -14,7 +13,7 @@ public class IngressosRepositorio {
         this.connection = connection;
     }
 
-    public void venderIngresso(IngressosVendidos entidade) {
+    public void venderIngresso(IngressoVendido entidade) {
         String sql = "INSERT INTO IngressosVendidos (data_exibicao, assento_id, tipo_ingresso, valor_pago) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setDate(1, entidade.getDataExibicao());
@@ -42,5 +41,22 @@ public class IngressosRepositorio {
         } catch (SQLException e) {
             System.out.println("Erro ao cancelar compra: " + e.getMessage());
         }
+    }
+
+    public List<String> consultarAssentosVendidos(Date dataExibicao) {
+        List<String> assentosVendidos = new ArrayList<>();
+
+        String sql = "SELECT assento_id FROM IngressosVendidos WHERE data_exibicao = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setDate(1, dataExibicao);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                assentosVendidos.add(resultSet.getString("assento_id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return assentosVendidos;
     }
 }
