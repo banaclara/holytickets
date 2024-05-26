@@ -3,11 +3,11 @@ package model;
 public class IngressoVendido {
     String data;
     String espetaculo;
-    TiposIngressos tipoIngresso;
+    TipoAssentos tipoIngresso;
     String valor;
     String assento;
 
-    public IngressoVendido(String d, String e, TiposIngressos t, String v, String a) {
+    public IngressoVendido(String d, String e, TipoAssentos t, String v, String a) {
         this.data = d;
         this.espetaculo = e;
         this.valor = v;

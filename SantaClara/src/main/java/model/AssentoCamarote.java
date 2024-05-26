@@ -1,7 +1,7 @@
 package model;
 
 public class AssentoCamarote extends Assentos {
-    protected TiposIngressos tipo = TiposIngressos.CAMAROTE;
+    protected TipoAssentos tipo = TipoAssentos.CAMAROTE;
     protected String lugares[][] = new String[10][10];
 
     public AssentoCamarote() {

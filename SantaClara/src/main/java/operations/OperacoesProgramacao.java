@@ -5,6 +5,7 @@ import repositories.EspetaculoRepositorio;
 import repositories.ProgramacaoRepositorio;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,6 +43,29 @@ public class OperacoesProgramacao {
             for (Programacao programacao : progDoMes) {
                 if (!programacao.getTituloEspetaculo().equals(tituloAtual)) { // faz com que o título só apareça se for diferente do que foi exibido por último e a programação seja organizada semanalmente já que cada espetáculo fica em cartaz por pelo menos 1 final de semana
                     tituloAtual = programacao.getTituloEspetaculo(); // atualiza o título atual
+                    System.out.println("--------------------------");
+                    System.out.println("Espetáculo: " + tituloAtual);
+                    System.out.println("Datas em exibição:");
+                }
+                System.out.println(programacao.getDataExibicao());
+            }
+            System.out.println("--------------------------");
+        }
+    }
+
+    public static void exibirProgramacaoMensal(ProgramacaoRepositorio repositorio) {
+        LocalDate dataAtual = LocalDate.now();
+        int mes = dataAtual.getMonthValue();
+        int ano = dataAtual.getYear();
+        List<Programacao> progDoMes = repositorio.programacaoMensal(mes, ano);
+        if (progDoMes.isEmpty()) {
+            System.out.println("Nada programado para esse mês.");
+        } else {
+            System.out.println("Programação do mês atual:");
+            String tituloAtual = "";
+            for (Programacao programacao : progDoMes) {
+                if (!programacao.getTituloEspetaculo().equals(tituloAtual)) {
+                    tituloAtual = programacao.getTituloEspetaculo();
                     System.out.println("--------------------------");
                     System.out.println("Espetáculo: " + tituloAtual);
                     System.out.println("Datas em exibição:");

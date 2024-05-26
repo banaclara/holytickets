@@ -22,7 +22,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
     @Override
     public void inserir(Espetaculo entidade) {
         //INSERT dos valores
-        String sql = "INSERT INTO espetaculos (titulo, diretor, elenco, descricao) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Espetaculos (titulo, diretor, elenco, descricao) VALUES (?, ?, ?, ?)";
         //A PreparedStatement define os valores que serão INSERT
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             //setString converte o valor definido para VARCHAR ou CHAR no BD
@@ -41,7 +41,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
     @Override
     public void excluir(int id) {
         //DELETE executa a instrução de exclusão
-        String sql = "DELETE FROM espetaculos WHERE id = ?";
+        String sql = "DELETE FROM Espetaculos WHERE id = ?";
         //Definimos o ID no BD para a exclusão
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             //setInt converte o valor definido para INTEGER no BD
@@ -61,7 +61,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
     public List<Espetaculo> buscarPorNome(String nome) {
         List<Espetaculo> espetaculos = new ArrayList<>();
         // SELECT executa a busca no BD após a definição do nome
-        String sql = "SELECT * FROM espetaculos WHERE titulo LIKE ?";
+        String sql = "SELECT * FROM Espetaculos WHERE titulo LIKE ?";
         // Define o nome que será procurado
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, "%" + nome + "%");
@@ -86,7 +86,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
     @Override
     public List<Espetaculo> buscarTodos() {
         List<Espetaculo> espetaculos = new ArrayList<>();
-        String sql = "SELECT * FROM espetaculos";
+        String sql = "SELECT * FROM Espetaculos";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -108,7 +108,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
 
     //Define um novo titulo no BD
     public void alterarTitulo(int id, String novoTitulo) {
-        String sql = "UPDATE espetaculos SET titulo = ? WHERE id = ?";
+        String sql = "UPDATE Espetaculos SET titulo = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, novoTitulo);
             statement.setInt(2, id);
@@ -119,7 +119,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
     }
     //Define um novo diretor no BD
     public void alterarDiretor(int id, String novoDiretor) {
-        String sql = "UPDATE espetaculos SET diretor = ? WHERE id = ?";
+        String sql = "UPDATE Espetaculos SET diretor = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, novoDiretor);
             statement.setInt(2, id);
@@ -130,7 +130,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
     }
     //Define um novo elenco no BD
     public void alterarElenco(int id, String novoElenco) {
-        String sql = "UPDATE espetaculos SET elenco = ? WHERE id = ?";
+        String sql = "UPDATE Espetaculos SET elenco = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, novoElenco);
             statement.setInt(2, id);
@@ -141,7 +141,7 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
     }
     //Define uma nova descrição no BD
     public void alterarDescricao(int id, String novaDescricao) {
-        String sql = "UPDATE espetaculos SET descricao = ? WHERE id = ?";
+        String sql = "UPDATE Espetaculos SET descricao = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, novaDescricao);
             statement.setInt(2, id);

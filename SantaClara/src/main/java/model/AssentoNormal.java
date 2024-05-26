@@ -1,7 +1,7 @@
 package model;
 
 public class AssentoNormal extends Assentos {
-    protected TiposIngressos tipo = TiposIngressos.COMUM;
+    protected TipoAssentos tipo = TipoAssentos.COMUM;
 
     protected String lugares[][] = new String[10][10];
 

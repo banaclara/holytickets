@@ -17,7 +17,7 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
 
     @Override
     public void inserir(Programacao entidade) {
-        String sql = "INSERT INTO programacao (data_exibicao, espetaculo_id) VALUES (?, ?)";
+        String sql = "INSERT INTO Programacao (data_exibicao, espetaculo_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setDate(1, entidade.getDataExibicao());
             statement.setInt(2, entidade.getEspetaculoID());
@@ -29,7 +29,7 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
     }
 
     public void alterarEspetaculo(int id, int novoEspetaculo) {
-        String sql = "UPDATE programacao SET espetaculo_id = ? WHERE id = ?";
+        String sql = "UPDATE Programacao SET espetaculo_id = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(2, id);
             statement.setInt(1, novoEspetaculo);
@@ -40,7 +40,7 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
     }
 
     public void alterarData(int id, Date novaData) {
-        String sql = "UPDATE programacao SET data_exibicao = ? WHERE id = ?";
+        String sql = "UPDATE Programacao SET data_exibicao = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(2, id);
             statement.setDate(1, novaData);
@@ -52,7 +52,7 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
 
     @Override
     public void excluir(int id) {
-        String sql = "DELETE FROM programacao WHERE id = ?";
+        String sql = "DELETE FROM Programacao WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             int rowsAffected = statement.executeUpdate();
@@ -69,7 +69,7 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
     @Override
     public List<Programacao> buscarTodos() {
         List<Programacao> programacao = new ArrayList<>();
-        String sql = "SELECT programacao.id, espetaculos.titulo, programacao.data_exibicao FROM espetaculos INNER JOIN programacao ON espetaculos.id = programacao.espetaculo_id ORDER BY programacao.data_exibicao";
+        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao FROM Espetaculos INNER JOIN Programacao ON Espetaculos.id = Programacao.espetaculo_id ORDER BY Programacao.data_exibicao";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -87,21 +87,23 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
 
     public List<Programacao> programacaoMensal(int mesDesejado, int anoDesejado) {
         List<Programacao> entradasNoMes = new ArrayList<>();
-        String sql = "SELECT espetaculos.titulo, programacao.data_exibicao FROM espetaculos INNER JOIN programacao ON espetaculos.id = programacao.espetaculo_id WHERE MONTH(programacao.data_exibicao) = ? AND YEAR(programacao.data_exibicao) = ? ORDER BY espetaculos.titulo, programacao.data_exibicao";
+        String sql = "SELECT  Programacao.id, Espetaculos.titulo, Programacao.data_exibicao FROM Espetaculos INNER JOIN Programacao ON espetaculos.id = Programacao.espetaculo_id WHERE MONTH(Programacao.data_exibicao) = ? AND YEAR(Programacao.data_exibicao) = ? ORDER BY Programacao.data_exibicao, Espetaculos.titulo";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, mesDesejado);
             statement.setInt(2, anoDesejado);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String titulo = resultSet.getString(1); // começa no 1
-                Date dataExibicao = resultSet.getDate(2);
-                Programacao programacao = new Programacao(dataExibicao, titulo); // valores
-                entradasNoMes.add(programacao);
+                int id = resultSet.getInt(1);
+                String titulo = resultSet.getString(2);
+                Date dataExibicao = resultSet.getDate(3);
+                Programacao prog = new Programacao(id, dataExibicao, titulo);
+                entradasNoMes.add(prog);
             }
         }  catch (SQLException e) {
-                System.out.println("Erro ao buscar os programação do mês: " + e.getMessage());
-            }
+            System.out.println("Erro ao buscar os programação do mês: " + e.getMessage());
+        }
         return entradasNoMes;
     }
+
 }

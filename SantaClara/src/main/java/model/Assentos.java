@@ -8,7 +8,7 @@ public class Assentos {
     protected String lugares[][] = new String[10][10];
     protected String data;
     protected String espetaculo;
-    protected TiposIngressos tipo;
+    protected TipoAssentos tipo;
 
     public void printLugares() {
         for (int i = 0; i < this.lugares.length; i++) {

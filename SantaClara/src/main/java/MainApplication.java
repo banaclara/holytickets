@@ -1,8 +1,8 @@
-import model.AssentoCamarote;
-import model.AssentoNormal;
 import operations.OperacoesProgramacao;
+import operations.OperacoesVendas;
 import repositories.EspetaculoRepositorio;
 import operations.OperacoesEspetaculo;
+import repositories.IngressosRepositorio;
 import repositories.ProgramacaoRepositorio;
 
 import java.sql.Connection;
@@ -12,7 +12,8 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatrosc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=*****;encrypt=false;";
+//    private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatrosc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=*****;encrypt=false;";
+    private static final String URL = "jdbc:sqlserver://DESKTOP-5AIMLEU\\SQLSVE:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=abc123;encrypt=false;";
     //fazer um pacote de conexão com o banco de dados, fazer um file e jogar o sql
     public static void main(String[] args) {
         try {
@@ -24,50 +25,21 @@ public class MainApplication {
             Connection connection = DriverManager.getConnection(URL);
             System.out.println("Conexão bem-sucedida!");
 
-//            AssentoCamarote a = new AssentoCamarote();
-//            a.imprimir();
-//            AssentoNormal an = new AssentoNormal();
-//            a.imprimir();
-
             EspetaculoRepositorio espetaculoRepositorio = new EspetaculoRepositorio(connection);
             ProgramacaoRepositorio programacaoRepositorio = new ProgramacaoRepositorio(connection);
+            IngressosRepositorio ingressosRepositorio = new IngressosRepositorio(connection);
             Scanner scanner = new Scanner(System.in);
-            AssentoCamarote c = new AssentoCamarote();
-            AssentoNormal n = new AssentoNormal();
+
             while (true) {
                 menuPrincipal();
                 int opt;
                 opt = scanner.nextInt();
-                boolean outro = true;
                 switch (opt) {
                     case 1:
                         menuEspetaculos(scanner, espetaculoRepositorio);
                         break;
                     case 2:
-                        // inserir menu e métodos da venda de ingressos
-                        do {
-                            System.out.println("Plateia Comum (1) ou Camarote (2)?");
-                            int resposta = scanner.nextInt();
-                            switch (resposta){
-                                case 1:
-                                    n.imprimir();
-                                    System.out.println("Qual assento deseja reservar?");
-                                    String reserva = scanner.next();
-                                    n.reservar(reserva);
-                                    System.out.println("Reservar outro?");
-                                    outro = scanner.nextBoolean();
-                                    break;
-                                case 2:
-                                    c.imprimir();
-                                    System.out.println("Qual assento deseja reservar?");
-                                    reserva = scanner.next();
-                                    c.reservar(reserva);
-                                    System.out.println("Reservar outro?");
-                                    outro = scanner.nextBoolean();
-                                    break;
-                            }
-
-                        } while (outro);
+                        menuVendas(scanner, programacaoRepositorio, ingressosRepositorio);
                         break;
                     case 3:
                         menuProgramacao(scanner, programacaoRepositorio, espetaculoRepositorio);
@@ -166,4 +138,31 @@ public class MainApplication {
             }
         } while (!sair);
     }
+
+    public static void menuVendas(Scanner scanner, ProgramacaoRepositorio pRepositorio, IngressosRepositorio iRepositorio) {
+        boolean sair = false;
+        do {
+            System.out.println("1. Comprar ingresso");
+            System.out.println("2. Cancelar compra de ingresso");
+            System.out.println("0. Voltar ao menu principal");
+
+            int opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcao) {
+                case 1:
+                    OperacoesVendas.comprarIngresso(scanner, pRepositorio, iRepositorio);
+                    break;
+                case 2:
+                    OperacoesVendas.cancelarCompra(scanner, iRepositorio);
+                    break;
+                case 0:
+                    sair = true;
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        } while (!sair);
+    }
+
 }

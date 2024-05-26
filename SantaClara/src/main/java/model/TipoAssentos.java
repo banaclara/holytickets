@@ -1,6 +1,6 @@
 package model;
 
-public enum TiposIngressos {
+public enum TipoAssentos {
     COMUM,
     CAMAROTE
 };
