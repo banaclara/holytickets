@@ -10,20 +10,6 @@ import java.util.Scanner;
 
 public class OperacoesVendas {
 
-    public static void cadastroDaVenda(Scanner scanner, ProgramacaoRepositorio repositorio, EspetaculoRepositorio espetaculoRepositorio) {
-        System.out.println("ID do espetáculo:");
-        int espetaculo = scanner.nextInt();
-
-        System.out.println("Data de exibição:");
-        String dataExibicao = scanner.next();
-
-        Programacao novaProgramacao = new Programacao(0, java.sql.Date.valueOf(dataExibicao), espetaculo);
-
-        repositorio.inserir(novaProgramacao);
-
-        System.out.println("Programação atualizada com sucesso!");
-    }
-
     public static void comprarIngresso(Scanner scanner, ProgramacaoRepositorio pRepositorio, IngressosRepositorio iRepositorio) {
         AssentoCamarote c = new AssentoCamarote();
         AssentoNormal n = new AssentoNormal();
