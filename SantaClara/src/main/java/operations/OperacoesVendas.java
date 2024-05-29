@@ -27,8 +27,11 @@ public class OperacoesVendas {
                     System.out.println("Qual assento deseja reservar?");
                     String reserva = scanner.next().toUpperCase();
                     Pagamento pagamento = OperacoesVendas.modoDePagamento(scanner, TipoAssentos.COMUM);
-                    iRepositorio.venderIngresso(new IngressoVendido(pagamento, java.sql.Date.valueOf(dataEspetaculo), reserva));
-                    System.out.println("Reservar outro?");
+                    IngressoVendido ingressoComum = new IngressoVendido(pagamento, java.sql.Date.valueOf(dataEspetaculo), reserva);
+                    iRepositorio.venderIngresso(ingressoComum);
+                    OperacoesIngresso.imprimirIngressos(ingressoComum, TipoAssentos.COMUM);
+                    //imprimir ingresso aqui
+                    System.out.println("Reservar outro? (true/false)");
                     outro = scanner.nextBoolean();
                     break;
                 case 2:
@@ -36,8 +39,11 @@ public class OperacoesVendas {
                     System.out.println("Qual assento deseja reservar?");
                     reserva = scanner.next().toUpperCase();
                     Pagamento pagamentoCa = OperacoesVendas.modoDePagamento(scanner, TipoAssentos.CAMAROTE);
-                    iRepositorio.venderIngresso(new IngressoVendido(pagamentoCa, java.sql.Date.valueOf(dataEspetaculo), reserva));
-                    System.out.println("Reservar outro?");
+                    IngressoVendido ingressoCamarote = new IngressoVendido(pagamentoCa, java.sql.Date.valueOf(dataEspetaculo), reserva);
+                    iRepositorio.venderIngresso(ingressoCamarote);
+                    OperacoesIngresso.imprimirIngressos(ingressoCamarote, TipoAssentos.CAMAROTE);
+                    //imprimir ingresso aqui
+                    System.out.println("Reservar outro? (true/false)");
                     outro = scanner.nextBoolean();
                     break;
             }
@@ -51,6 +57,7 @@ public class OperacoesVendas {
         String assento = scanner.next();
         repositorio.cancelarIngresso(assento, java.sql.Date.valueOf(data));
     }
+
 
     public static Pagamento modoDePagamento(Scanner scanner, TipoAssentos tipoAssento) {
         System.out.println("Modo de pagamento:");

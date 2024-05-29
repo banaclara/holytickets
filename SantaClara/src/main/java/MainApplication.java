@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-//    private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatrosc\\BD:1433;databaseName=teatrosc;integratedSecurity=false;user=sa;password=*****;encrypt=false;";
+    //private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatroStaClara\\BD:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=*******;encrypt=false;";
 
     //fazer um pacote de conexão com o banco de dados, fazer um file e jogar o sql
     public static void main(String[] args) {

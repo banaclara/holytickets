@@ -12,8 +12,6 @@ public class IngressoVendido extends Pagamento {
         this.assentoId = a;
     }
 
-    public IngressoVendido() {}
-
     public Date getDataExibicao() {
         return dataExibicao;
     }
