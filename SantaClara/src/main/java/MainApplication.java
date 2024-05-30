@@ -14,6 +14,8 @@ public class MainApplication {
     // Alterar o caminho da URL para o seu BD
     //private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatroStaClara\\BD:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=*******;encrypt=false;";
 
+    private static final String URL = "jdbc:sqlserver://DESKTOP-5AIMLEU\\SQLSVE:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=abc123;encrypt=false;";
+    
     //fazer um pacote de conexão com o banco de dados, fazer um file e jogar o sql
     public static void main(String[] args) {
         try {

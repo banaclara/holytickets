@@ -1,6 +1,5 @@
 package operations;
 
-import com.microsoft.sqlserver.jdbc.StringUtils;
 import model.TipoAssentos;
 import model.IngressoVendido;
 
@@ -8,7 +7,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-//import org.apache.commons.lang3.StringUtils;
 
 
 public class OperacoesIngresso {
@@ -30,7 +28,7 @@ public class OperacoesIngresso {
         System.out.println("Espetáculo tal meu cu essa buceta");
         System.out.println(data + " | 18h");
         //ver como capitalize
-        System.out.println(i.getTipoIngresso()+ " R$" + i.getValor());
+        System.out.println(i.getTipoIngresso().substring(0, 1).toUpperCase() + i.getTipoIngresso().substring(1) + " | R$" + i.getValor());
         System.out.println("ASSENTO " + tAssento + ": " + i.getAssentoId());
         System.out.println("-------------------------------------");
 

@@ -13,6 +13,8 @@ public class IngressosRepositorio {
         this.connection = connection;
     }
 
+
+
     public void venderIngresso(IngressoVendido entidade) {
         String sql = "INSERT INTO IngressosVendidos (data_exibicao, assento_id, tipo_ingresso, valor_pago) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {

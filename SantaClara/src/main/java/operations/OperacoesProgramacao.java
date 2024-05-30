@@ -54,14 +54,11 @@ public class OperacoesProgramacao {
     }
 
     public static void exibirProgramacaoMensal(ProgramacaoRepositorio repositorio) {
-        LocalDate dataAtual = LocalDate.now();
-        int mes = dataAtual.getMonthValue();
-        int ano = dataAtual.getYear();
-        List<Programacao> progDoMes = repositorio.programacaoMensal(mes, ano);
+        List<Programacao> progDoMes = repositorio.programacaoProximos30Dias();
         if (progDoMes.isEmpty()) {
-            System.out.println("Nada programado para esse mês.");
+            System.out.println("Nada programado para o mês.");
         } else {
-            System.out.println("Programação do mês atual:");
+            System.out.println("Programação:");
             String tituloAtual = "";
             for (Programacao programacao : progDoMes) {
                 if (!programacao.getTituloEspetaculo().equals(tituloAtual)) {
