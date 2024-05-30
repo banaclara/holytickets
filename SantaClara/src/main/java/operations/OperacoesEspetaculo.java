@@ -144,4 +144,11 @@ public class OperacoesEspetaculo {
         }
     }
 
+    public static void relatorio(Scanner scanner, EspetaculoRepositorio repositorio) {
+        OperacoesEspetaculo.listarEspetaculos(repositorio);
+        System.out.println("Digite o ID do espetáculo:");
+        int id = scanner.nextInt();
+        repositorio.relatorioDeVendas(id);
+    }
+
 }

@@ -12,7 +12,8 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatroStaClara\\BD:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=Porra123;encrypt=false;";
+
+    private static final String URL = "jdbc:sqlserver://DESKTOP-5AIMLEU\\SQLSVE:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=abc123;encrypt=false;";
 
     //fazer um pacote de conexão com o banco de dados, fazer um file e jogar o sql
     public static void main(String[] args) {
@@ -45,8 +46,7 @@ public class MainApplication {
                         menuProgramacao(scanner, programacaoRepositorio, espetaculoRepositorio);
                         break;
                     case 4:
-                        //inserir aqui o relatório de vendas
-                        menuRelatorio();
+                        OperacoesEspetaculo.relatorio(scanner, espetaculoRepositorio);
                         break;
                     case 5:
                         System.out.println("Encerrando o programa...");
@@ -168,9 +168,5 @@ public class MainApplication {
                     System.out.println("Opção inválida. Tente novamente.");
             }
         } while (!sair);
-    }
-
-    public static void menuRelatorio(){
-
     }
 }

@@ -149,4 +149,30 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
             e.printStackTrace();
         }
     }
+
+    public void relatorioDeVendas(int idEspetaculo) {
+        String sql = "SELECT Espetaculos.titulo AS 'Titulo do Espetaculo', COUNT(IngressosVendidos.assento_id) AS 'QT de Ingressos', SUM(IngressosVendidos.valor_pago) AS 'Valor Arrecadado', SUM(CASE WHEN IngressosVendidos.tipo_ingresso = 'meia' THEN 1 ELSE 0 END) AS '(Meia)', SUM(CASE WHEN IngressosVendidos.tipo_ingresso = 'inteira' THEN 1 ELSE 0 END) AS '(Inteira)', SUM(CASE WHEN IngressosVendidos.tipo_ingresso = 'social' THEN 1 ELSE 0 END) AS '(Social)' FROM Espetaculos JOIN Programacao ON Espetaculos.id = Programacao.espetaculo_id JOIN IngressosVendidos ON Programacao.data_exibicao = IngressosVendidos.data_exibicao WHERE Espetaculos.id = ? GROUP BY Espetaculos.titulo";
+
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idEspetaculo);
+            ResultSet resultSet = statement.executeQuery();
+            boolean ingressosVendidos = false;
+            while (resultSet.next()) {
+                ingressosVendidos = true;
+                System.out.println("--------------------------------------");
+                System.out.println("Título do Espetáculo: " + resultSet.getString("Titulo do Espetaculo"));
+                System.out.println("Quantidade total de ingressos vendidos: " + resultSet.getInt("QT de Ingressos"));
+                System.out.println("Valor arrecadado: " + resultSet.getBigDecimal("Valor Arrecadado"));
+                System.out.println("Quantidade de ingressos vendidos (Meia): " + resultSet.getInt("(Meia)"));
+                System.out.println("Quantidade de ingressos vendidos (Inteira): " + resultSet.getInt("(Inteira)"));
+                System.out.println("Quantidade de ingressos vendidos (Social): " + resultSet.getInt("(Social)"));
+                System.out.println("--------------------------------------");
+            }
+            if (!ingressosVendidos) {
+                System.out.println("Nenhum ingresso foi vendido para este espetáculo.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
