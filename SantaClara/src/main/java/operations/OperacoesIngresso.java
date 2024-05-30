@@ -32,7 +32,7 @@ public class OperacoesIngresso {
         System.out.println(ing.getTituloEspetaculo());
         System.out.println(data + " | 18h");
         System.out.println(tipo + " | R$" + i.getValor());
-        System.out.println("ASSENTO " + tAssento + ": " + ing.getAssentoId());
+        System.out.println("ASSENTO " + tAssento + ": " + i.getAssentoId());
         System.out.println("-------------------------------------");
 
 
