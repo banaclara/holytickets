@@ -2,10 +2,9 @@
 CREATE DATABASE teatrosc ON (NAME = teatrosc, FILENAME = 'C:\SQL\teatrosc\teatrosc.mdf');
 
 
-
 -- Cria a tabela espetaculos
-CREATE TABLE espetaculos (
-    id INT PRIMARY KEY IDENTITY,
+CREATE TABLE Espetaculos (
+    id INT NOT NULL IDENTITY CONSTRAINT pk_espetaculos PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
     diretor VARCHAR(100) NOT NULL,
 	elenco VARCHAR(100) NOT NULL,
@@ -13,36 +12,28 @@ CREATE TABLE espetaculos (
 );
 
 -- Cria a tabela programacao para armazenar os dias de exibição de cada espetáculo
-CREATE TABLE programacao (
-    id INT PRIMARY KEY IDENTITY,
+CREATE TABLE Programacao (
+    id INT NOT NULL IDENTITY CONSTRAINT pk_programacao PRIMARY KEY,
     espetaculo_id INT NOT NULL,
-    data_exibicao DATE NOT NULL,
-    FOREIGN KEY (espetaculo_id) REFERENCES espetaculos(id)
+    data_exibicao DATE NOT NULL CONSTRAINT un_data UNIQUE,
+    CONSTRAINT fk_espetaculo_id FOREIGN KEY (espetaculo_id) REFERENCES Espetaculos(id) ON DELETE CASCADE
 );
 
 -- Cria a tabela assentos
-CREATE TABLE assentos (
-    id CHAR(4) PRIMARY KEY,
-    tipo_assento VARCHAR(15) NOT NULL CHECK (tipo_assento IN ('Plateia', 'Camarote')), -- Pode ser 'Plateia' ou 'Camarote'
-    status VARCHAR(15) NOT NULL DEFAULT 'Disponível' -- Pode ser 'Disponível' ou 'Vendido'
+CREATE TABLE Assentos (
+    id VARCHAR(4) NOT NULL CONSTRAINT pk_assentos PRIMARY KEY,
+    tipo_assento VARCHAR(15) NOT NULL CHECK (tipo_assento IN ('comum', 'camarote')),
 );
 
 -- Cria a tabela ingressos
-CREATE TABLE ingressos (
-    id INT PRIMARY KEY IDENTITY,
-    programacao_id INT NOT NULL,
-    assento_id CHAR(4) NOT NULL,
-    tipo_ingresso VARCHAR(15) NOT NULL CHECK (tipo_ingresso IN ('Meio', 'Inteiro', 'Social')), -- Pode ser 'Meio', 'Inteiro' ou 'Social'
-    status VARCHAR(15) NOT NULL DEFAULT 'Disponível', -- Pode ser 'Disponível' ou 'Vendido'
-    FOREIGN KEY (programacao_id) REFERENCES programacao(id),
-    FOREIGN KEY (assento_id) REFERENCES assentos(id)
-);
-
--- Cria a tabela vendas
-CREATE TABLE vendas (
-    id INT PRIMARY KEY IDENTITY,
-    ingresso_id INT NOT NULL,
-    data_venda DATETIME NOT NULL DEFAULT GETDATE(),
-    FOREIGN KEY (ingresso_id) REFERENCES ingressos(id)
+CREATE TABLE IngressosVendidos (
+    data_exibicao DATE NOT NULL,
+    assento_id VARCHAR(4) NOT NULL,
+    tipo_ingresso VARCHAR(15) NOT NULL CHECK (tipo_ingresso IN ('meia', 'inteira', 'social')),
+	valor_pago DECIMAL(5, 2) NOT NULL,
+	data_venda DATETIME NOT NULL DEFAULT GETDATE(),
+	CONSTRAINT pk_ingressos PRIMARY KEY (assento_id, data_exibicao),
+    CONSTRAINT fk_data_exibicao FOREIGN KEY (data_exibicao) REFERENCES Programacao(data_exibicao) ON DELETE CASCADE,
+    CONSTRAINT fk_assento_id FOREIGN KEY (assento_id) REFERENCES Assentos(id)
 );
 

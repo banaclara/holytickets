@@ -132,4 +132,22 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
         return entradasNoMes;
     }
 
+    public boolean verificarData(String data) {
+        boolean check = false;
+        String sql = "SELECT COUNT(*) AS total FROM Programacao WHERE data_exibicao = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, data);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int total = resultSet.getInt("total");
+                if (total > 0) {
+                    check = true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
 }

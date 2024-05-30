@@ -20,6 +20,10 @@ public class OperacoesVendas {
         System.out.println("Digite a data do espetáculo que deseja assistir:");
         String dataEspetaculo = scanner.next();
 
+        if (!pRepositorio.verificarData(dataEspetaculo)) {
+            System.out.println("Não temos programação na data inserida.");
+            return;
+        }
 
         do {
             System.out.println("Plateia Comum (1) ou Camarote (2)?");
