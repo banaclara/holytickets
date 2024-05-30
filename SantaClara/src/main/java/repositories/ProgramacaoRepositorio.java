@@ -87,7 +87,7 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
 
     public List<Programacao> programacaoProximos30Dias() {
         List<Programacao> proximos30Dias = new ArrayList<>();
-        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao FROM Espetaculos INNER JOIN Programacao ON Espetaculos.id = Programacao.espetaculo_id WHERE Programacao.data_exibicao BETWEEN GETDATE() AND DATEADD(DAY, 30, GETDATE()) ORDER BY Programacao.data_exibicao, Espetaculos.titulo";
+        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao FROM Espetaculos INNER JOIN Programacao ON Espetaculos.id = Programacao.espetaculo_id WHERE Programacao.data_exibicao BETWEEN CONVERT(date, GETDATE()) AND DATEADD(DAY, 30, GETDATE()) ORDER BY Programacao.data_exibicao, Espetaculos.titulo";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
