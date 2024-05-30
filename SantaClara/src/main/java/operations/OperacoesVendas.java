@@ -19,7 +19,7 @@ public class OperacoesVendas {
         OperacoesProgramacao.exibirProgramacaoMensal(pRepositorio);
         System.out.println("Digite a data do espetáculo que deseja assistir:");
         String dataEspetaculo = scanner.next();
-        Date dataEsp= java.sql.Date.valueOf(dataEspetaculo);
+
 
         do {
             System.out.println("Plateia Comum (1) ou Camarote (2)?");
@@ -27,6 +27,7 @@ public class OperacoesVendas {
 
             switch (tipoAssento) {
                 case 1:
+                    Date dataEsp= java.sql.Date.valueOf(dataEspetaculo);
                     TipoAssentos comum = TipoAssentos.COMUM;
 
                     OperacoesAssentos.imprimir(n, dataEsp, comum, iRepositorio);
@@ -44,15 +45,16 @@ public class OperacoesVendas {
                     outro = scanner.nextBoolean();
                     break;
                 case 2:
+                    Date dataEspCa= java.sql.Date.valueOf(dataEspetaculo);
                     TipoAssentos camarote = TipoAssentos.CAMAROTE;
 
-                    OperacoesAssentos.imprimir(c, dataEsp, camarote, iRepositorio);
+                    OperacoesAssentos.imprimir(c, dataEspCa, camarote, iRepositorio);
 
                     System.out.println("Qual assento deseja reservar?");
                     reserva = scanner.next().toUpperCase();
 
                     Pagamento pagamentoCa = OperacoesVendas.modoDePagamento(scanner, camarote);
-                    IngressoVendido ingressoCamarote = new IngressoVendido(pagamentoCa, dataEsp, reserva);
+                    IngressoVendido ingressoCamarote = new IngressoVendido(pagamentoCa, dataEspCa, reserva);
                     iRepositorio.venderIngresso(ingressoCamarote);
 
                     OperacoesIngresso.imprimirIngressos(iRepositorio, ingressoCamarote, camarote);

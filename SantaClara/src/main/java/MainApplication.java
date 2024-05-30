@@ -1,3 +1,4 @@
+import conection.Database;
 import operations.OperacoesProgramacao;
 import operations.OperacoesVendas;
 import repositories.EspetaculoRepositorio;
@@ -6,28 +7,18 @@ import repositories.IngressosRepositorio;
 import repositories.ProgramacaoRepositorio;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MainApplication {
-    // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatroStaClara\\BD:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=Porra123;encrypt=false;";
-
-    //fazer um pacote de conexão com o banco de dados, fazer um file e jogar o sql
     public static void main(String[] args) {
         try {
-            System.setProperty("java.library.path", "SantaClara/lib/mssql-jdbc_auth-12.6.1.x64.dll");
+            Database db = new Database();
+            EspetaculoRepositorio espetaculoRepositorio = db.getEspetaculo();
+            ProgramacaoRepositorio programacaoRepositorio = db.getProgramacao();
+            IngressosRepositorio ingressosRepositorio = db.getIngressos();
+            Connection connection = db.getConnection();
 
-            System.out.println("Iniciando a conexão com o banco de dados...");
-            System.out.println("String de conexão: " + URL);
-
-            Connection connection = DriverManager.getConnection(URL);
-            System.out.println("Conexão bem-sucedida!");
-
-            EspetaculoRepositorio espetaculoRepositorio = new EspetaculoRepositorio(connection);
-            ProgramacaoRepositorio programacaoRepositorio = new ProgramacaoRepositorio(connection);
-            IngressosRepositorio ingressosRepositorio = new IngressosRepositorio(connection);
             Scanner scanner = new Scanner(System.in);
 
             while (true) {
