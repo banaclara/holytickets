@@ -29,7 +29,7 @@ public class OperacoesVendas {
                     Pagamento pagamento = OperacoesVendas.modoDePagamento(scanner, TipoAssentos.COMUM);
                     IngressoVendido ingressoComum = new IngressoVendido(pagamento, java.sql.Date.valueOf(dataEspetaculo), reserva);
                     iRepositorio.venderIngresso(ingressoComum);
-                    OperacoesIngresso.imprimirIngressos(ingressoComum, TipoAssentos.COMUM);
+                    OperacoesIngresso.imprimirIngressos(iRepositorio, ingressoComum, TipoAssentos.COMUM);
                     //imprimir ingresso aqui
                     System.out.println("Reservar outro? (true/false)");
                     outro = scanner.nextBoolean();
@@ -41,7 +41,7 @@ public class OperacoesVendas {
                     Pagamento pagamentoCa = OperacoesVendas.modoDePagamento(scanner, TipoAssentos.CAMAROTE);
                     IngressoVendido ingressoCamarote = new IngressoVendido(pagamentoCa, java.sql.Date.valueOf(dataEspetaculo), reserva);
                     iRepositorio.venderIngresso(ingressoCamarote);
-                    OperacoesIngresso.imprimirIngressos(ingressoCamarote, TipoAssentos.CAMAROTE);
+                    OperacoesIngresso.imprimirIngressos(iRepositorio, ingressoCamarote, TipoAssentos.CAMAROTE);
                     //imprimir ingresso aqui
                     System.out.println("Reservar outro? (true/false)");
                     outro = scanner.nextBoolean();

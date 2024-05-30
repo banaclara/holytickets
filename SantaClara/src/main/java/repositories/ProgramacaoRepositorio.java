@@ -22,7 +22,7 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
             statement.setDate(1, entidade.getDataExibicao());
             statement.setInt(2, entidade.getEspetaculoID());
             statement.executeUpdate();
-            System.out.println("Programação atualizada! O espetáculo foi cadastrado na data indicada.");
+            System.out.println("O espetáculo foi cadastrado na data indicada.");
         } catch (SQLException e) {
             System.out.println("Erro ao atualizar programação: " + e.getMessage());
         }

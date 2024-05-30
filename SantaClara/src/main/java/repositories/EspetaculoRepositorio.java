@@ -32,7 +32,6 @@ public class EspetaculoRepositorio implements Repositorio<Espetaculo> {
             statement.setString(4, entidade.getDescricao());
             //executeUpdate atualiza a tabela com os valores definidos;
             statement.executeUpdate();
-            System.out.println("Espetáculo inserido com sucesso!");
         } catch (SQLException e) {
             System.out.println("Erro ao inserir o espetáculo: " + e.getMessage());
         }

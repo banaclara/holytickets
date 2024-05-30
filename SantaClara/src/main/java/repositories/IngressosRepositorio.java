@@ -1,6 +1,7 @@
 package repositories;
 
 import model.IngressoVendido;
+import model.Programacao;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +14,23 @@ public class IngressosRepositorio {
         this.connection = connection;
     }
 
-
+    public IngressoVendido dadosDoIngresso(Date dataExibicao) {
+        IngressoVendido ingresso = null;
+        String sql = "SELECT Espetaculos.titulo, IngressosVendidos.data_exibicao, IngressosVendidos.assento_id FROM IngressosVendidos INNER JOIN Programacao ON IngressosVendidos.data_exibicao = Programacao.data_exibicao INNER JOIN Espetaculos ON Programacao.espetaculo_id = Espetaculos.id WHERE IngressosVendidos.data_exibicao = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setDate(1, dataExibicao);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String titulo = resultSet.getString(1);
+                Date dataExib = resultSet.getDate(2);
+                String assento = resultSet.getString(3);
+                ingresso = new IngressoVendido(titulo, dataExib, assento);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao imprimir o ingresso: " + e.getMessage());
+        }
+        return ingresso;
+    }
 
     public void venderIngresso(IngressoVendido entidade) {
         String sql = "INSERT INTO IngressosVendidos (data_exibicao, assento_id, tipo_ingresso, valor_pago) VALUES (?, ?, ?, ?)";
@@ -23,7 +40,7 @@ public class IngressosRepositorio {
             statement.setString(3, entidade.getTipoIngresso());
             statement.setBigDecimal(4, entidade.getValor());
             statement.executeUpdate();
-            System.out.println("Ingresso vendido! O assento " + entidade.getAssentoId() + " já está reservado para o dia " + entidade.getDataExibicao() + ".");
+            System.out.println("Ingresso vendido! O assento " + entidade.getAssentoId() + " já está reservado para " + entidade.getDataExibicao() + ".");
         } catch (SQLException e) {
             System.out.println("Erro na venda do ingresso: " + e.getMessage());
         }
