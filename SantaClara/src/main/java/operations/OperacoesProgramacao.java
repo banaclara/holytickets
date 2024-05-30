@@ -30,10 +30,10 @@ public class OperacoesProgramacao {
 
     public static void pesquisarProgramacaoMensal(Scanner scanner, ProgramacaoRepositorio repositorio) {
         System.out.println("Pesquisar programação por mês:");
+        System.out.println("Digite o ano:");
+        int ano = scanner.nextInt();
         System.out.println("Digite o mês:"); // 01 janeiro, 02 fevereiro ... 12 dezembro
         int mes = scanner.nextInt();
-        System.out.println("E o ano:");
-        int ano = scanner.nextInt();
         List<Programacao> progDoMes = repositorio.programacaoMensal(mes, ano);
         if (progDoMes.isEmpty()) {
             System.out.println("Nada programado para esse mês.");

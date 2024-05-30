@@ -6,6 +6,7 @@ import repositories.IngressosRepositorio;
 import repositories.ProgramacaoRepositorio;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.Scanner;
 
 public class OperacoesVendas {
@@ -18,31 +19,44 @@ public class OperacoesVendas {
         OperacoesProgramacao.exibirProgramacaoMensal(pRepositorio);
         System.out.println("Digite a data do espetáculo que deseja assistir:");
         String dataEspetaculo = scanner.next();
+        Date dataEsp= java.sql.Date.valueOf(dataEspetaculo);
+
         do {
             System.out.println("Plateia Comum (1) ou Camarote (2)?");
             int tipoAssento = scanner.nextInt();
+
             switch (tipoAssento) {
                 case 1:
-                    OperacoesAssentos.imprimir(n, java.sql.Date.valueOf(dataEspetaculo), TipoAssentos.COMUM, iRepositorio);
+                    TipoAssentos comum = TipoAssentos.COMUM;
+
+                    OperacoesAssentos.imprimir(n, dataEsp, comum, iRepositorio);
+
                     System.out.println("Qual assento deseja reservar?");
                     String reserva = scanner.next().toUpperCase();
-                    Pagamento pagamento = OperacoesVendas.modoDePagamento(scanner, TipoAssentos.COMUM);
-                    IngressoVendido ingressoComum = new IngressoVendido(pagamento, java.sql.Date.valueOf(dataEspetaculo), reserva);
+
+                    Pagamento pagamento = OperacoesVendas.modoDePagamento(scanner, comum);
+                    IngressoVendido ingressoComum = new IngressoVendido(pagamento, dataEsp, reserva);
                     iRepositorio.venderIngresso(ingressoComum);
-                    OperacoesIngresso.imprimirIngressos(iRepositorio, ingressoComum, TipoAssentos.COMUM);
-                    //imprimir ingresso aqui
+
+                    OperacoesIngresso.imprimirIngressos(iRepositorio, ingressoComum, comum);
+
                     System.out.println("Reservar outro? (true/false)");
                     outro = scanner.nextBoolean();
                     break;
                 case 2:
-                    OperacoesAssentos.imprimir(c, java.sql.Date.valueOf(dataEspetaculo), TipoAssentos.CAMAROTE, iRepositorio);
+                    TipoAssentos camarote = TipoAssentos.CAMAROTE;
+
+                    OperacoesAssentos.imprimir(c, dataEsp, camarote, iRepositorio);
+
                     System.out.println("Qual assento deseja reservar?");
                     reserva = scanner.next().toUpperCase();
-                    Pagamento pagamentoCa = OperacoesVendas.modoDePagamento(scanner, TipoAssentos.CAMAROTE);
-                    IngressoVendido ingressoCamarote = new IngressoVendido(pagamentoCa, java.sql.Date.valueOf(dataEspetaculo), reserva);
+
+                    Pagamento pagamentoCa = OperacoesVendas.modoDePagamento(scanner, camarote);
+                    IngressoVendido ingressoCamarote = new IngressoVendido(pagamentoCa, dataEsp, reserva);
                     iRepositorio.venderIngresso(ingressoCamarote);
-                    OperacoesIngresso.imprimirIngressos(iRepositorio, ingressoCamarote, TipoAssentos.CAMAROTE);
-                    //imprimir ingresso aqui
+
+                    OperacoesIngresso.imprimirIngressos(iRepositorio, ingressoCamarote, camarote);
+
                     System.out.println("Reservar outro? (true/false)");
                     outro = scanner.nextBoolean();
                     break;

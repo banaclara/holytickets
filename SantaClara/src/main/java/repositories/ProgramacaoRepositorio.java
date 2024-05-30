@@ -69,7 +69,9 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
     @Override
     public List<Programacao> buscarTodos() {
         List<Programacao> programacao = new ArrayList<>();
-        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao FROM Espetaculos INNER JOIN Programacao ON Espetaculos.id = Programacao.espetaculo_id ORDER BY Programacao.data_exibicao";
+        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao " +
+                "FROM Espetaculos INNER JOIN Programacao ON Espetaculos.id = Programacao.espetaculo_id O" +
+                "RDER BY Programacao.data_exibicao";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -87,7 +89,10 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
 
     public List<Programacao> programacaoProximos30Dias() {
         List<Programacao> proximos30Dias = new ArrayList<>();
-        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao FROM Espetaculos INNER JOIN Programacao ON Espetaculos.id = Programacao.espetaculo_id WHERE Programacao.data_exibicao BETWEEN CONVERT(date, GETDATE()) AND DATEADD(DAY, 30, GETDATE()) ORDER BY Programacao.data_exibicao, Espetaculos.titulo";
+        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao " +
+                "FROM Espetaculos INNER JOIN Programacao ON Espetaculos.id = Programacao.espetaculo_id " +
+                "WHERE Programacao.data_exibicao BETWEEN CONVERT(date, GETDATE()) AND DATEADD(DAY, 30, GETDATE()) " +
+                "ORDER BY Programacao.data_exibicao, Espetaculos.titulo";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -105,7 +110,10 @@ public class ProgramacaoRepositorio implements Repositorio<Programacao>{
 
     public List<Programacao> programacaoMensal(int mesDesejado, int anoDesejado) {
         List<Programacao> entradasNoMes = new ArrayList<>();
-        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao FROM Espetaculos INNER JOIN Programacao ON espetaculos.id = Programacao.espetaculo_id WHERE MONTH(Programacao.data_exibicao) = ? AND YEAR(Programacao.data_exibicao) = ? ORDER BY Programacao.data_exibicao, Espetaculos.titulo";
+        String sql = "SELECT Programacao.id, Espetaculos.titulo, Programacao.data_exibicao " +
+                "FROM Espetaculos INNER JOIN Programacao ON espetaculos.id = Programacao.espetaculo_id " +
+                "WHERE MONTH(Programacao.data_exibicao) = ? AND YEAR(Programacao.data_exibicao) = ? " +
+                "ORDER BY Programacao.data_exibicao, Espetaculos.titulo";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, mesDesejado);

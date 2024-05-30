@@ -12,8 +12,7 @@ import java.util.Scanner;
 
 public class MainApplication {
     // Alterar o caminho da URL para o seu BD
-    //private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatroStaClara\\BD:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=*******;encrypt=false;";
-
+    private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatroStaClara\\BD:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=Porra123;encrypt=false;";
 
     //fazer um pacote de conexão com o banco de dados, fazer um file e jogar o sql
     public static void main(String[] args) {
@@ -46,6 +45,10 @@ public class MainApplication {
                         menuProgramacao(scanner, programacaoRepositorio, espetaculoRepositorio);
                         break;
                     case 4:
+                        //inserir aqui o relatório de vendas
+                        menuRelatorio();
+                        break;
+                    case 5:
                         System.out.println("Encerrando o programa...");
                         connection.close();
                         scanner.close();
@@ -63,7 +66,8 @@ public class MainApplication {
         System.out.println("1 - Espetáculos");
         System.out.println("2 - Venda de ingresssos");
         System.out.println("3 - Programação mensal");
-        System.out.println("4 - Sair do programa");
+        System.out.println("4 - Relatório de vendas");
+        System.out.println("5 - Sair do programa");
     }
 
     public static void menuEspetaculos(Scanner scanner, EspetaculoRepositorio repositorio) {
@@ -110,7 +114,7 @@ public class MainApplication {
         do {
             System.out.println("Escolha uma opção:");
             System.out.println("1. Adicionar data de exibição a um espetáculo");
-            System.out.println("2. Pesquisar programação mensal");
+            System.out.println("2. Pesquisar programação");
             System.out.println("3. Realizar alterações nas programações");
             System.out.println("4. Cancelar data de exibição");
             System.out.println("0. Voltar ao menu principal");
@@ -166,4 +170,7 @@ public class MainApplication {
         } while (!sair);
     }
 
+    public static void menuRelatorio(){
+
+    }
 }
