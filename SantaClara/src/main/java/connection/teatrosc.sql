@@ -37,3 +37,40 @@ CREATE TABLE IngressosVendidos (
     CONSTRAINT fk_assento_id FOREIGN KEY (assento_id) REFERENCES Assentos(id)
 );
 
+DECLARE @id CHAR(4)
+DECLARE @tipo VARCHAR(15)
+
+SET @tipo = 'comum'
+
+DECLARE @letra CHAR(1)
+SET @letra = 'A'
+WHILE @letra <= 'I'
+BEGIN
+    DECLARE @numero INT = 1
+    WHILE @numero <= 8
+    BEGIN
+        SET @id = @letra + RIGHT('0' + CAST(@numero AS VARCHAR), 2)
+
+        INSERT INTO Assentos (id, tipo_assento) VALUES (@id, @tipo)
+
+        SET @numero = @numero + 1
+    END
+    SET @letra = CHAR(ASCII(@letra) + 1)
+END
+
+SET @tipo = 'camarote'
+
+DECLARE @i INT = 1
+WHILE @i <= 28
+BEGIN
+    SET @id = 'CA' + RIGHT('0' + CAST(@i AS VARCHAR), 2)
+
+    INSERT INTO Assentos (id, tipo_assento) VALUES (@id, @tipo)
+
+    SET @i = @i + 1
+END
+
+-- visualizando
+
+select * from Assentos
+select * from IngressosVendidos

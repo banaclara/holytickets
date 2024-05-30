@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class Database {
     // Alterar o caminho da URL para o seu BD
-    private static final String URL = "jdbc:sqlserver://DESKTOP-***\\***:1433;databaseName=teatroStaClara;integratedSecurity=false;user=sa;password=***;encrypt=false;";
+    private static final String URL = "jdbc:sqlserver://;serverName=localhost;databaseName=teatrosc;integratedSecurity=false;user=sa;password=***;encrypt=false;";
 
     private EspetaculoRepositorio espetaculo;
     private ProgramacaoRepositorio programacao;
