@@ -1,0 +1,12 @@
+services:
+  dev:
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: holytickets-db
+    volumes:
+      - ./data:/var/lib/postgresql/data
