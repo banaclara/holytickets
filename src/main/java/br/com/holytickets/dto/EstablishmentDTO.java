@@ -1,38 +1,31 @@
-package br.com.holytickets.models;
+package br.com.holytickets.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Entity
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Establishment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+@Data
+public class EstablishmentDTO {
     private UUID id;
 
     @NotNull(message = "Name is required")
     private String name;
 
-    @NotNull
-    private String password;
-
-    @NotNull
     @Email(message = "Invalid format")
+    @NotNull(message = "Email is required")
     private String email;
+
+    @NotNull(message = "Password is required")
+    private String password;
 
     @NotNull(message = "Capacity is required")
     private Integer capacity;
 
     private String contactNumber;
 
-    @Embedded
-    private Address address;
+    private AddressDTO address;
 }
