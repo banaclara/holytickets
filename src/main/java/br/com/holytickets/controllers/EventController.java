@@ -39,7 +39,7 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> findByTitle(@PathVariable String title) {
         List<EventDTO> events = eventService.findByTitle(title);
         if (events.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Caso nenhum evento seja encontrado
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(events);
     }
