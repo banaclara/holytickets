@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDTO {
-    private String title;
-    private String director;
-    private String casting;
-    private String description;
+public class SeatDTO {
+    private UUID id;
+    private String seatNumber;
+    private boolean available;
 }

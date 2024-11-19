@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDTO {
-    private String title;
-    private String director;
-    private String casting;
-    private String description;
+public class ScheduleDTO {
+    private UUID id;
+    private LocalDate exhibitionDate;
+    private String room;
 }
