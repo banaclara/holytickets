@@ -7,13 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Establishment {
+@NoArgsConstructor
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -21,18 +22,13 @@ public class Establishment {
     @NotNull(message = "Name is required")
     private String name;
 
+    @Email(message = "Invalid email format")
+    @NotNull(message = "Email is required")
+    private String email;
+
     @NotNull(message = "Password is required")
     private String password;
 
-    @NotNull(message = "Email is required")
-    @Email(message = "Invalid format")
-    private String email;
-
-    @NotNull(message = "Capacity is required")
-    private Integer capacity;
-
-    private String contactNumber;
-
-    @Embedded
-    private Address address;
+    @OneToMany(mappedBy = "user")
+    private List<Ticket> tickets;
 }
