@@ -16,28 +16,28 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EventService {
-
     private final EventRepository eventRepository;
+    private final Converter converter;
 
     public Event register(EventDTO eventDTO) {
-        Event event = Converter.convertDtoToEntity(eventDTO);
+        Event event = converter.convertToEntity(eventDTO);
         return eventRepository.save(event);
     }
 
     public List<EventDTO> listAll() {
         return eventRepository.findAll()
                 .stream()
-                .map(Converter::convertToDTO)  // Converte cada Event para EventDTO
+                .map(converter::convertToDTO)  // Converte cada Event para EventDTO
                 .collect(Collectors.toList());
     }
     public Optional<EventDTO> findByID(UUID id) {
         return eventRepository.findById(id)
-                .map(Converter::convertToDTO);
+                .map(converter::convertToDTO);
     }
     public List<EventDTO> findByTitle(String title) {
         return eventRepository.findByTitleContainingIgnoreCase(title)
                 .stream()
-                .map(Converter::convertToDTO)
+                .map(converter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +51,7 @@ public class EventService {
 
             Event updatedEvent = eventRepository.save(event);
 
-            return Converter.convertToDTO(updatedEvent);
+            return converter.convertToDTO(updatedEvent);
         });
     }
     public boolean deleteEvent(UUID id) {
@@ -59,7 +59,6 @@ public class EventService {
             eventRepository.deleteById(id);
             return true;
         } catch (EmptyResultDataAccessException e) {
-
             return false;
         }
     }
