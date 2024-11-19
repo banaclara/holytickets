@@ -1,14 +1,12 @@
-package br.com.holytickets.models;
+package br.com.holytickets.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Embeddable
-@Data
 @AllArgsConstructor
-public class Address {
+@Data
+public class AddressDTO {
     @Size(min = 5, message = "Street name must contain at least 5 characters")
     private String street;
 

@@ -1,5 +1,6 @@
 package br.com.holytickets.controllers;
 
+import br.com.holytickets.dto.EstablishmentDTO;
 import br.com.holytickets.models.Establishment;
 import br.com.holytickets.services.EstablishmentService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class EstablishmentController {
     private final EstablishmentService establismentService;
 
     @PostMapping("/register")
-    public ResponseEntity<Establishment> signup(@RequestBody Establishment dto) {
-        Establishment e = establismentService.register(dto);
+    public ResponseEntity<EstablishmentDTO> signup(@RequestBody EstablishmentDTO dto) {
+        EstablishmentDTO e = establismentService.register(dto);
         return ResponseEntity.ok(e);
     }
 }
