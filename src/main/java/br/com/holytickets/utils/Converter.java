@@ -3,22 +3,15 @@ package br.com.holytickets.utils;
 import br.com.holytickets.dto.AddressDTO;
 import br.com.holytickets.dto.EstablishmentDTO;
 import br.com.holytickets.dto.EventDTO;
+import br.com.holytickets.dto.UserDTO;
 import br.com.holytickets.models.Address;
 import br.com.holytickets.models.Establishment;
 import br.com.holytickets.models.Event;
+import br.com.holytickets.models.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Converter {
-
-    public Event convertToEntity(EventDTO eventDTO) {
-        Event event = new Event();
-        event.setTitle(eventDTO.getTitle());
-        event.setDirector(eventDTO.getDirector());
-        event.setCasting(eventDTO.getCasting());
-        event.setDescription(eventDTO.getDescription());
-        return event;
-    }
 
     public EventDTO convertToDTO(Event event) {
         EventDTO eventDTO = new EventDTO();
@@ -27,6 +20,15 @@ public class Converter {
         eventDTO.setCasting(event.getCasting());
         eventDTO.setDescription(event.getDescription());
         return eventDTO;
+    }
+
+    public Event convertToEntity(EventDTO eventDTO) {
+        Event event = new Event();
+        event.setTitle(eventDTO.getTitle());
+        event.setDirector(eventDTO.getDirector());
+        event.setCasting(eventDTO.getCasting());
+        event.setDescription(eventDTO.getDescription());
+        return event;
     }
 
     public EstablishmentDTO convertToDTO(Establishment establishment) {

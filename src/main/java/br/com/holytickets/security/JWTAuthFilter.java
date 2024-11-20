@@ -1,7 +1,12 @@
 package br.com.holytickets.security;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
+import br.com.holytickets.models.Establishment;
+import br.com.holytickets.models.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -39,30 +44,49 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         return null;
     }
 
-    // this method needs to be checked
-    private boolean validateToken(String token) {
-        try {
-            JWT.require(Algorithm.HMAC256(secretKey))
-                    .build()
-                    .verify(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    private String generateUserToken(User user) {
+        String token = JWT.create()
+                .withSubject(user.getEmail())
+                .withClaim("role", "USER")
+                .withExpiresAt(expirationDate())
+                .sign(Algorithm.HMAC256(secretKey));
+        return token;
     }
 
-    // this method needs adjustments
-    private UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        try {
-            DecodedJWT jwt = JWT.decode(token);
-            String username = jwt.getSubject();
+    private String generateEstablishmentToken(Establishment establishment) {
+        String token = JWT.create()
+                .withSubject(establishment.getEmail())
+                .withClaim("role", "ESTABLISHMENT")
+                .withExpiresAt(expirationDate())
+                .sign(Algorithm.HMAC256(secretKey));
+        return token;
+    }
 
-            if (username != null) {
-                return new UsernamePasswordAuthenticationToken(username, null, null);
+    private Instant expirationDate() {
+        return LocalDateTime.now().plusHours(5).atZone(ZoneId.systemDefault()).toInstant();
+    }
+
+    private boolean validateToken(String token) {
+        JWT.require(Algorithm.HMAC256(secretKey))
+                .build()
+                .verify(token)
+                .getSubject();
+        return true;
+    }
+
+    private UsernamePasswordAuthenticationToken getAuthentication(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        String sub = jwt.getSubject();
+        String role = jwt.getClaim("role").asString();
+
+        if (sub != null && role != null) {
+            if (role.equals("USER")) {
+                return new UsernamePasswordAuthenticationToken(sub, null, null);
+            } else if (role.equals("ESTABLISHMENT")) {
+                return new UsernamePasswordAuthenticationToken(sub, null, null);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
         return null;
     }
 }

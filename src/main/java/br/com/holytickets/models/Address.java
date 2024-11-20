@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Address {
     @Size(min = 5, message = "Street name must contain at least 5 characters")
     private String street;
