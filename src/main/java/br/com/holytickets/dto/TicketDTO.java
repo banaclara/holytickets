@@ -13,4 +13,6 @@ import java.util.UUID;
 public class TicketDTO {
     private UUID id;
     private LocalDateTime purchaseDate;
+    private UserDTO user;
+    private SeatDTO seat;
 }

@@ -5,6 +5,7 @@ import br.com.holytickets.models.Establishment;
 import br.com.holytickets.repositories.EstablishmentRepository;
 import br.com.holytickets.utils.Converter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +18,17 @@ import java.util.stream.Collectors;
 public class EstablishmentService {
     private final EstablishmentRepository establishmentRepository;
     private final Converter converter;
+    private final PasswordEncoder passwordEncoder;
 
     public EstablishmentDTO register(EstablishmentDTO dto) {
         Establishment establishment = converter.convertToEntity(dto);
         return converter.convertToDTO(establishmentRepository.save(establishment));
+    }
+
+    public boolean validateCredentials(String email, String password) {
+        return establishmentRepository.findByEmail(email)
+                .map(establishment -> passwordEncoder.matches(password, establishment.getPassword()))
+                .orElse(false);
     }
 
     public List<EstablishmentDTO> list() {

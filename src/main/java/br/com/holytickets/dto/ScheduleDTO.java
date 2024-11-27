@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -12,6 +13,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScheduleDTO {
     private UUID id;
-    private LocalDate exhibitionDate;
+    private LocalDateTime exhibitionDate;
     private String room;
+    private EventDTO event;
+    private List<SeatDTO> seats;
 }

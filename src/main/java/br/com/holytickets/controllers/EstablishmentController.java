@@ -17,12 +17,6 @@ import java.util.UUID;
 public class EstablishmentController {
     private final EstablishmentService establishmentService;
 
-    @PostMapping("/register")
-    public ResponseEntity<EstablishmentDTO> signup(@RequestBody EstablishmentDTO dto) {
-        EstablishmentDTO e = establishmentService.register(dto);
-        return ResponseEntity.ok(e);
-    }
-
     @GetMapping("/")
     public ResponseEntity<List<EstablishmentDTO>> listAll() {
         List<EstablishmentDTO> e = establishmentService.list();
