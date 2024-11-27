@@ -19,6 +19,11 @@ public class Converter {
         eventDTO.setDirector(event.getDirector());
         eventDTO.setCasting(event.getCasting());
         eventDTO.setDescription(event.getDescription());
+
+        if (event.getEstablishment() != null) {
+            eventDTO.setEstablishmentId(event.getEstablishment().getId());
+        }
+
         return eventDTO;
     }
 
@@ -28,6 +33,13 @@ public class Converter {
         event.setDirector(eventDTO.getDirector());
         event.setCasting(eventDTO.getCasting());
         event.setDescription(eventDTO.getDescription());
+
+        if (eventDTO.getEstablishmentId() != null) {
+            Establishment establishment = new Establishment();
+            establishment.setId(eventDTO.getEstablishmentId());
+            event.setEstablishment(establishment);
+        }
+
         return event;
     }
 

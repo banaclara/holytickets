@@ -24,9 +24,13 @@ public class Event {
     @NotNull(message = "Director is required")
     private String director;
 
-    @NotNull(message = "Casting in required")
+    @NotNull(message = "Casting is required")
     private String casting;
 
     @NotNull(message = "Description is required")
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "establishment_id", referencedColumnName = "id", nullable = false)
+    private Establishment establishment;
 }
