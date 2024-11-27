@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.UUID;
 @Repository
 public interface EventRepository extends JpaRepository<Event, UUID> {
+    boolean existsByTitle(String title);
     List<Event> findByTitleContainingIgnoreCase(String title);
 }

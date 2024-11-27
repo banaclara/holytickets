@@ -1,7 +1,12 @@
 package br.com.holytickets.services;
 
 import br.com.holytickets.dto.EventDTO;
+import br.com.holytickets.exception.BadRequestException;
+import br.com.holytickets.exception.ConflictException;
+import br.com.holytickets.exception.ResourceNotFoundException;
+import br.com.holytickets.models.Establishment;
 import br.com.holytickets.models.Event;
+import br.com.holytickets.repositories.EstablishmentRepository;
 import br.com.holytickets.repositories.EventRepository;
 import br.com.holytickets.utils.Converter;
 import lombok.RequiredArgsConstructor;
@@ -17,50 +22,81 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
+    private final EstablishmentRepository establishmentRepository;
     private final Converter converter;
 
-    public Event register(EventDTO eventDTO) {
+    public EventDTO register(EventDTO eventDTO) {
+        if (eventRepository.existsByTitle(eventDTO.getTitle())) {
+            throw new ConflictException("Já existe um evento com o título: " + eventDTO.getTitle());
+        }
+
+        if (eventDTO.getEstablishmentId() == null) {
+            throw new BadRequestException("O ID do estabelecimento não foi fornecido.");
+        }
+
+        Establishment establishment = establishmentRepository.findById(eventDTO.getEstablishmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + eventDTO.getEstablishmentId() + " não encontrado."));
+
         Event event = converter.convertToEntity(eventDTO);
-        return eventRepository.save(event);
+        event.setEstablishment(establishment);
+
+        event = eventRepository.save(event);
+
+        return converter.convertToDTO(event);
     }
 
     public List<EventDTO> listAll() {
-        return eventRepository.findAll()
-                .stream()
-                .map(converter::convertToDTO)  // Converte cada Event para EventDTO
+        List<Event> events = eventRepository.findAll();
+        if (events.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum evento encontrado.");
+        }
+        return events.stream()
+                .map(converter::convertToDTO)
                 .collect(Collectors.toList());
     }
-    public Optional<EventDTO> findByID(UUID id) {
+
+    public EventDTO findByID(UUID id) {
         return eventRepository.findById(id)
-                .map(converter::convertToDTO);
+                .map(converter::convertToDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Evento com ID " + id + " não encontrado."));
     }
     public List<EventDTO> findByTitle(String title) {
-        return eventRepository.findByTitleContainingIgnoreCase(title)
-                .stream()
+        List<Event> events = eventRepository.findByTitleContainingIgnoreCase(title);
+
+        if (events.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum evento encontrado com o título: " + title);
+        }
+        return events.stream()
                 .map(converter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
 
-    public Optional<EventDTO> update(UUID id, EventDTO eventDTO) {
-        return eventRepository.findById(id).map(event -> {
-            event.setTitle(eventDTO.getTitle());
-            event.setDirector(eventDTO.getDirector());
-            event.setCasting(eventDTO.getCasting());
-            event.setDescription(eventDTO.getDescription());
+    public EventDTO update(UUID id, EventDTO eventDTO) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Evento com ID " + id + " não encontrado."));
 
-            Event updatedEvent = eventRepository.save(event);
+        event.setTitle(eventDTO.getTitle());
+        event.setDirector(eventDTO.getDirector());
+        event.setCasting(eventDTO.getCasting());
+        event.setDescription(eventDTO.getDescription());
 
-            return converter.convertToDTO(updatedEvent);
-        });
-    }
-    public boolean deleteEvent(UUID id) {
-        try {
-            eventRepository.deleteById(id);
-            return true;
-        } catch (EmptyResultDataAccessException e) {
-            return false;
+        if (eventDTO.getEstablishmentId() != null) {
+            Establishment establishment = establishmentRepository.findById(eventDTO.getEstablishmentId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + eventDTO.getEstablishmentId() + " não encontrado."));
+            event.setEstablishment(establishment);
         }
+
+        Event updatedEvent = eventRepository.save(event);
+
+        return converter.convertToDTO(updatedEvent);
     }
+
+    public void deleteEvent(UUID id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Evento com ID " + id + " não encontrado."));
+        eventRepository.delete(event);
+    }
+
 
 }

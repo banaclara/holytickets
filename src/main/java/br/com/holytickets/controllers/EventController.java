@@ -3,6 +3,7 @@ package br.com.holytickets.controllers;
 import br.com.holytickets.dto.EventDTO;
 import br.com.holytickets.models.Event;
 import br.com.holytickets.services.EventService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,10 @@ import java.util.UUID;
 public class EventController {
 
     private final EventService eventService;
-
     @PostMapping("/register")
-    public ResponseEntity<Event> register(@RequestBody EventDTO eventDTO) {
-        Event event = eventService.register(eventDTO);
-        return ResponseEntity.ok(event);
+    public ResponseEntity<EventDTO> register(@Valid @RequestBody EventDTO eventDTO) {
+        EventDTO createdEvent = eventService.register(eventDTO);
+        return ResponseEntity.ok(createdEvent);
     }
     @GetMapping("/list")
     public ResponseEntity<List<EventDTO>> listAll() {
@@ -30,34 +30,24 @@ public class EventController {
     }
     @GetMapping("/findById/{id}")
     public ResponseEntity<EventDTO> findByID(@PathVariable UUID id) {
-        return eventService.findByID(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        EventDTO eventDTO = eventService.findByID(id);
+        return ResponseEntity.ok(eventDTO);
     }
 
     @GetMapping("/findByTitle/{title}")
     public ResponseEntity<List<EventDTO>> findByTitle(@PathVariable String title) {
         List<EventDTO> events = eventService.findByTitle(title);
-        if (events.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
         return ResponseEntity.ok(events);
     }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<EventDTO> update(@PathVariable UUID id, @RequestBody EventDTO eventDTO) {
-        Optional<EventDTO> updatedEvent = eventService.update(id, eventDTO);
-
-        return updatedEvent.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        EventDTO updatedEvent = eventService.update(id, eventDTO);
+        return ResponseEntity.ok(updatedEvent);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable UUID id) {
-        boolean isDeleted = eventService.deleteEvent(id);
-
-        if (isDeleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        eventService.deleteEvent(id);
+        return ResponseEntity.noContent().build();
     }
 }
