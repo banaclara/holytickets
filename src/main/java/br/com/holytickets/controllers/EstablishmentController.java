@@ -3,6 +3,7 @@ package br.com.holytickets.controllers;
 import br.com.holytickets.dto.EstablishmentDTO;
 import br.com.holytickets.dto.EventDTO;
 import br.com.holytickets.services.EstablishmentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,22 +25,29 @@ public class EstablishmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<EstablishmentDTO>> findEstablishment(@PathVariable UUID id) {
-        Optional<EstablishmentDTO> e = establishmentService.findByID(id);
-        return ResponseEntity.ok(e);
+    public ResponseEntity<EstablishmentDTO> findEstablishmentById(@PathVariable UUID id) {
+        EstablishmentDTO establishmentDTO = establishmentService.findByID(id);
+        return ResponseEntity.ok(establishmentDTO);
     }
 
-    @GetMapping("/{name}")
+
+    @GetMapping("/name/{name}")
     public ResponseEntity<List<EstablishmentDTO>> findEstablishmentByName(@PathVariable String name) {
-        List<EstablishmentDTO> e = establishmentService.findByName(name);
-        return ResponseEntity.ok(e);
+        List<EstablishmentDTO> establishments = establishmentService.findByName(name.trim().toLowerCase());
+        return ResponseEntity.ok(establishments);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EstablishmentDTO> update(@PathVariable UUID id, @RequestBody EstablishmentDTO establishmentDTO) {
-        Optional<EstablishmentDTO> updated = establishmentService.update(id, establishmentDTO);
-
-        return updated.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<EstablishmentDTO> update(@PathVariable UUID id,
+                                                   @RequestBody @Valid EstablishmentDTO establishmentDTO) {
+        EstablishmentDTO updated = establishmentService.update(id, establishmentDTO);
+        return ResponseEntity.ok(updated);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        establishmentService.deleteStab(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

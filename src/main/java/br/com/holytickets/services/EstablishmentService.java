@@ -1,6 +1,8 @@
 package br.com.holytickets.services;
 
 import br.com.holytickets.dto.EstablishmentDTO;
+import br.com.holytickets.exception.ConflictException;
+import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.models.Establishment;
 import br.com.holytickets.repositories.EstablishmentRepository;
 import br.com.holytickets.utils.Converter;
@@ -21,9 +23,14 @@ public class EstablishmentService {
     private final PasswordEncoder passwordEncoder;
 
     public EstablishmentDTO register(EstablishmentDTO dto) {
+
+        if (!establishmentRepository.findByName(dto.getName()).isEmpty()) {
+            throw new ConflictException("Já existe um estabelecimento com o nome: " + dto.getName());
+        }
         Establishment establishment = converter.convertToEntity(dto);
         return converter.convertToDTO(establishmentRepository.save(establishment));
     }
+
 
     public boolean validateCredentials(String email, String password) {
         return establishmentRepository.findByEmail(email)
@@ -32,34 +39,57 @@ public class EstablishmentService {
     }
 
     public List<EstablishmentDTO> list() {
-        return establishmentRepository.findAll().stream()
+        List<Establishment> establishments = establishmentRepository.findAll();
+        if (establishments.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum estabelecimento encontrado.");
+        }
+        return establishments.stream()
                 .map(converter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<EstablishmentDTO> findByID(UUID id) {
-        return establishmentRepository.findById(id)
-                .map(converter::convertToDTO);
+
+    public EstablishmentDTO findByID(UUID id) {
+        // Lança a exceção se o estabelecimento não for encontrado
+        Establishment establishment = establishmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + id + " não encontrado."));
+
+        return converter.convertToDTO(establishment);
     }
+
 
     public List<EstablishmentDTO> findByName(String name) {
-        return establishmentRepository.findByName(name)
-                .stream()
+        List<Establishment> establishments = establishmentRepository.findByName(name);
+
+        if (establishments.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum estabelecimento encontrado com o nome: " + name);
+        }
+
+        return establishments.stream()
                 .map(converter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<EstablishmentDTO> update(UUID id, EstablishmentDTO establishmentDTO) {
-        return establishmentRepository.findById(id).map(establishment -> {
-            establishment.setName(establishmentDTO.getName());
-            establishment.setEmail(establishmentDTO.getEmail());
-            establishment.setCapacity(establishmentDTO.getCapacity());
-            establishment.setContactNumber(establishmentDTO.getContactNumber());
 
+    public EstablishmentDTO update(UUID id, EstablishmentDTO establishmentDTO) {
+        Establishment establishment = establishmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + id + " não encontrado."));
 
-            Establishment updatedEstablishment = establishmentRepository.save(establishment);
+        establishment.setName(establishmentDTO.getName());
+        establishment.setEmail(establishmentDTO.getEmail());
+        establishment.setCapacity(establishmentDTO.getCapacity());
+        establishment.setContactNumber(establishmentDTO.getContactNumber());
 
-            return converter.convertToDTO(updatedEstablishment);
-        });
+        Establishment updatedEstablishment = establishmentRepository.save(establishment);
+
+        return converter.convertToDTO(updatedEstablishment);
     }
+    public void deleteStab(UUID id) {
+        Establishment establishment = establishmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + id + " não encontrado."));
+
+        establishmentRepository.delete(establishment);
+    }
+
+
 }
