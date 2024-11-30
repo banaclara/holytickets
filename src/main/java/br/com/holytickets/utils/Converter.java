@@ -48,7 +48,6 @@ public class Converter {
                 establishment.getName(),
                 establishment.getEmail(),
                 establishment.getPassword(),
-                establishment.getCapacity(),
                 establishment.getContactNumber(),
                 convertToDTO(establishment.getAddress())
         );
@@ -70,7 +69,6 @@ public class Converter {
                 establishmentDTO.getName(),
                 establishmentDTO.getEmail(),
                 establishmentDTO.getPassword(),
-                establishmentDTO.getCapacity(),
                 establishmentDTO.getContactNumber(),
                 convertToEntity(establishmentDTO.getAddress())
         );

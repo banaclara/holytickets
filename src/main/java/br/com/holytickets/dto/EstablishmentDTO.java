@@ -24,9 +24,6 @@ public class EstablishmentDTO {
     @Size(min = 8, message = "Password must be at least 8 characters long.")
     private String password;
 
-    @Min(value = 1, message = "Capacity must be at least 1.")
-    private Integer capacity;
-
     @NotEmpty(message = "Contact number cannot be empty.")
     private String contactNumber;
 
