@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventDTO {
+    private UUID id;
 
     @NotBlank(message = "O título do evento não pode ser vazio.")
     @Size(max = 100, message = "O título do evento não pode ter mais de 100 caracteres.")

@@ -12,6 +12,7 @@ public class Converter {
 
     public EventDTO convertToDTO(Event event) {
         EventDTO eventDTO = new EventDTO();
+        eventDTO.setId(event.getId());
         eventDTO.setTitle(event.getTitle());
         eventDTO.setDirector(event.getDirector());
         eventDTO.setCasting(event.getCasting());
@@ -26,6 +27,7 @@ public class Converter {
 
     public Event convertToEntity(EventDTO eventDTO) {
         Event event = new Event();
+        event.setId(eventDTO.getId());
         event.setTitle(eventDTO.getTitle());
         event.setDirector(eventDTO.getDirector());
         event.setCasting(eventDTO.getCasting());
