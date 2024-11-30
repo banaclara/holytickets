@@ -7,6 +7,7 @@ import br.com.holytickets.services.AuthService;
 import br.com.holytickets.services.EstablishmentService;
 import br.com.holytickets.services.UserService;
 import br.com.holytickets.utils.JWTUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,10 +34,15 @@ public class AuthController {
     }
 
     @PostMapping("/register/establishment")
-    public ResponseEntity<String> registerEstablishment(@RequestBody EstablishmentDTO establishmentDTO) {
+    public ResponseEntity<String> registerEstablishment(@RequestBody @Valid EstablishmentDTO establishmentDTO) {
         establishmentDTO.setPassword(passwordEncoder.encode(establishmentDTO.getPassword()));
+
+        // Chama o serviço para registrar o estabelecimento
         EstablishmentDTO createdEstablishment = establishmentService.register(establishmentDTO);
+
+        // Geração do token JWT após o registro
         String token = jwtUtils.generateToken(createdEstablishment.getEmail(), "ESTABLISHMENT");
+
         return ResponseEntity.ok(token);
     }
 

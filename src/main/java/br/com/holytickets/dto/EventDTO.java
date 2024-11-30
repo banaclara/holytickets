@@ -12,18 +12,19 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventDTO {
+    private UUID id;
 
-    @NotBlank(message = "O título do evento não pode ser vazio.")
-    @Size(max = 100, message = "O título do evento não pode ter mais de 100 caracteres.")
+    @NotBlank(message = "Event title cannot be empty.")
+    @Size(max = 100, message = "Event title cannot be longer than 100 characters.")
     private String title;
 
-    @NotBlank(message = "O nome do diretor não pode ser vazio.")
+    @NotBlank(message = "Director name cannot be empty.")
     private String director;
 
-    @NotBlank(message = "O elenco não pode ser vazio.")
+    @NotBlank(message = "Casting cannot be empty.")
     private String casting;
 
-    @NotBlank(message = "A descrição do evento não pode ser vazia.")
+    @NotBlank(message = "Event description cannot be empty.")
     private String description;
 
     private UUID establishmentId;

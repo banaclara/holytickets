@@ -10,7 +10,6 @@ import br.com.holytickets.repositories.EstablishmentRepository;
 import br.com.holytickets.repositories.EventRepository;
 import br.com.holytickets.utils.Converter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,15 +26,15 @@ public class EventService {
 
     public EventDTO register(EventDTO eventDTO) {
         if (eventRepository.existsByTitle(eventDTO.getTitle())) {
-            throw new ConflictException("Já existe um evento com o título: " + eventDTO.getTitle());
+            throw new ConflictException("An event with the title: " + eventDTO.getTitle() + " already exists.");
         }
 
         if (eventDTO.getEstablishmentId() == null) {
-            throw new BadRequestException("O ID do estabelecimento não foi fornecido.");
+            throw new BadRequestException("The establishment ID was not provided.");
         }
 
         Establishment establishment = establishmentRepository.findById(eventDTO.getEstablishmentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + eventDTO.getEstablishmentId() + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + eventDTO.getEstablishmentId() + " not found."));
 
         Event event = converter.convertToEntity(eventDTO);
         event.setEstablishment(establishment);
@@ -48,7 +47,7 @@ public class EventService {
     public List<EventDTO> listAll() {
         List<Event> events = eventRepository.findAll();
         if (events.isEmpty()) {
-            throw new ResourceNotFoundException("Nenhum evento encontrado.");
+            throw new ResourceNotFoundException("No events found.");
         }
         return events.stream()
                 .map(converter::convertToDTO)
@@ -58,23 +57,23 @@ public class EventService {
     public EventDTO findByID(UUID id) {
         return eventRepository.findById(id)
                 .map(converter::convertToDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Evento com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Event with ID " + id + " not found."));
     }
+
     public List<EventDTO> findByTitle(String title) {
         List<Event> events = eventRepository.findByTitleContainingIgnoreCase(title);
 
         if (events.isEmpty()) {
-            throw new ResourceNotFoundException("Nenhum evento encontrado com o título: " + title);
+            throw new ResourceNotFoundException("No events found with the title: " + title);
         }
         return events.stream()
                 .map(converter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-
     public EventDTO update(UUID id, EventDTO eventDTO) {
         Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Evento com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Event with ID " + id + " not found."));
 
         event.setTitle(eventDTO.getTitle());
         event.setDirector(eventDTO.getDirector());
@@ -83,7 +82,7 @@ public class EventService {
 
         if (eventDTO.getEstablishmentId() != null) {
             Establishment establishment = establishmentRepository.findById(eventDTO.getEstablishmentId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + eventDTO.getEstablishmentId() + " não encontrado."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + eventDTO.getEstablishmentId() + " not found."));
             event.setEstablishment(establishment);
         }
 
@@ -94,9 +93,7 @@ public class EventService {
 
     public void deleteEvent(UUID id) {
         Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Evento com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Event with ID " + id + " not found."));
         eventRepository.delete(event);
     }
-
-
 }
