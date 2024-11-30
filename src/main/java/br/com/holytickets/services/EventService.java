@@ -10,7 +10,6 @@ import br.com.holytickets.repositories.EstablishmentRepository;
 import br.com.holytickets.repositories.EventRepository;
 import br.com.holytickets.utils.Converter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

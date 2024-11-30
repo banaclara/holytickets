@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -50,7 +49,6 @@ public class EstablishmentService {
 
 
     public EstablishmentDTO findByID(UUID id) {
-        // Lança a exceção se o estabelecimento não for encontrado
         Establishment establishment = establishmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + id + " não encontrado."));
 
