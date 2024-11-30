@@ -1,5 +1,6 @@
 package br.com.holytickets.dto;
 
+import br.com.holytickets.models.Room;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,6 @@ import java.util.UUID;
 public class ScheduleDTO {
     private UUID id;
     private LocalDateTime exhibitionDate;
-    private String room;
     private EventDTO event;
     private List<SeatDTO> seats;
 }

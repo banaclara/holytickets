@@ -33,4 +33,7 @@ public class Establishment {
 
     @Embedded
     private Address address;
+
+    @Embedded
+    private Room room;
 }

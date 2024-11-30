@@ -1,24 +1,23 @@
 package br.com.holytickets.models;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
+@Embeddable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Room extends Establishment {
-   // private List<Seat> seatsSold;
-    private String seatType;
-    protected String roomDisplay[][];
+public class Room {
 
-    @Override
-    public Integer getCapacity() {
-        return super.getCapacity();
-    }
+    @NotNull(message = "Row is requited")
+    private Integer rows;
+
+    @NotNull(message = "Column is requited")
+    private Integer columns;
+
+
 }

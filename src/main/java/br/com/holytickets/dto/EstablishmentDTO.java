@@ -28,4 +28,8 @@ public class EstablishmentDTO {
     private String contactNumber;
 
     private AddressDTO address;
+
+    @NotEmpty(message = "Room characteristics cannot be empty")
+    private RoomDTO room;
+
 }
