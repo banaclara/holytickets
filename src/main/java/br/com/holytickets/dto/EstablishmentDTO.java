@@ -1,6 +1,7 @@
 package br.com.holytickets.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,20 +14,20 @@ import java.util.UUID;
 public class EstablishmentDTO {
     private UUID id;
 
-    @NotEmpty(message = "O nome não pode ser vazio.")
+    @NotEmpty(message = "Name cannot be empty.")
     private String name;
 
-    @Email(message = "O e-mail deve ser válido.")
-    @NotEmpty(message = "O e-mail não pode ser vazio.")
+    @Email(message = "Email must be valid.")
+    @NotEmpty(message = "Email cannot be empty.")
     private String email;
 
-    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres.")
+    @Size(min = 8, message = "Password must be at least 8 characters long.")
     private String password;
 
-
+    @Min(value = 1, message = "Capacity must be at least 1.")
     private Integer capacity;
 
-    @NotEmpty(message = "O número de contato não pode ser vazio.")
+    @NotEmpty(message = "Contact number cannot be empty.")
     private String contactNumber;
 
     private AddressDTO address;
