@@ -24,12 +24,11 @@ public class EstablishmentService {
     public EstablishmentDTO register(EstablishmentDTO dto) {
 
         if (!establishmentRepository.findByName(dto.getName()).isEmpty()) {
-            throw new ConflictException("Já existe um estabelecimento com o nome: " + dto.getName());
+            throw new ConflictException("An establishment with the name " + dto.getName() + " already exists.");
         }
         Establishment establishment = converter.convertToEntity(dto);
         return converter.convertToDTO(establishmentRepository.save(establishment));
     }
-
 
     public boolean validateCredentials(String email, String password) {
         return establishmentRepository.findByEmail(email)
@@ -40,27 +39,25 @@ public class EstablishmentService {
     public List<EstablishmentDTO> list() {
         List<Establishment> establishments = establishmentRepository.findAll();
         if (establishments.isEmpty()) {
-            throw new ResourceNotFoundException("Nenhum estabelecimento encontrado.");
+            throw new ResourceNotFoundException("No establishments found.");
         }
         return establishments.stream()
                 .map(converter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-
     public EstablishmentDTO findByID(UUID id) {
         Establishment establishment = establishmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + id + " not found."));
 
         return converter.convertToDTO(establishment);
     }
-
 
     public List<EstablishmentDTO> findByName(String name) {
         List<Establishment> establishments = establishmentRepository.findByName(name);
 
         if (establishments.isEmpty()) {
-            throw new ResourceNotFoundException("Nenhum estabelecimento encontrado com o nome: " + name);
+            throw new ResourceNotFoundException("No establishments found with the name: " + name);
         }
 
         return establishments.stream()
@@ -68,10 +65,9 @@ public class EstablishmentService {
                 .collect(Collectors.toList());
     }
 
-
     public EstablishmentDTO update(UUID id, EstablishmentDTO establishmentDTO) {
         Establishment establishment = establishmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + id + " not found."));
 
         establishment.setName(establishmentDTO.getName());
         establishment.setEmail(establishmentDTO.getEmail());
@@ -82,12 +78,11 @@ public class EstablishmentService {
 
         return converter.convertToDTO(updatedEstablishment);
     }
+
     public void deleteStab(UUID id) {
         Establishment establishment = establishmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Estabelecimento com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + id + " not found."));
 
         establishmentRepository.delete(establishment);
     }
-
-
 }
