@@ -87,46 +87,4 @@ public class EstablishmentService {
         establishmentRepository.delete(establishment);
     }
 
-    public Map<Character, String> getDefaultSeatChart(UUID id) throws JsonProcessingException {
-        Establishment establishment = establishmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + id + " not found."));
-        Integer rows = establishment.getRoom().getRows();
-        Integer columns = establishment.getRoom().getColumns();
-
-        List<Character> namedRows = new ArrayList<>();
-        for (int i = 0; i < rows; i++) {
-            // Calcula a letra com base no índice
-            char letra = (char) ('A' + (i % 26)); // Usa 'A' como base para letras maiúsculas
-            namedRows.add(letra);
-        }
-
-        List<String> numberedColumns = new ArrayList<>();
-        for (int i = 0; i < columns; i++) {
-            String numero;
-            if (i + 1 < 10) {
-                numero = "0" + (i + 1);
-            } else {
-                numero = "" + (i + 1) + "";
-            }
-            numberedColumns.add(numero);
-        }
-
-
-        Map<Character, String> seatChart = new HashMap<>();
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-        for (int i = 0; i < rows; i++) {
-            List<String> seatList = new ArrayList<>();
-            for (int j = 0; j < columns; j++) {
-                seatList.add(namedRows.get(i) + numberedColumns.get(j));
-            }
-            String seats = mapper.writeValueAsString(seatList);
-            seatChart.put(namedRows.get(i), seats);
-        }
-
-
-        return seatChart;
-    }
 }
