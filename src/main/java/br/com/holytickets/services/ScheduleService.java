@@ -58,4 +58,27 @@ public class ScheduleService {
                 .map(converter::convertToDTO) // Usa o conversor para converter cada entidade em DTO
                 .collect(Collectors.toList()); // Retorna a lista de DTOs
     }
+    // Método para deletar um agendamento por ID
+    public void deleteById(UUID id) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + id + " not found."));
+        scheduleRepository.delete(schedule);
+    }
+
+    // Método para atualizar um agendamento
+    public ScheduleDTO update(UUID id, ScheduleDTO scheduleDTO) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + id + " not found."));
+
+        // Atualiza os campos do agendamento
+        schedule.setExhibitionDate(scheduleDTO.getExhibitionDate());
+        if (scheduleDTO.getEventId() != null) {
+            EventDTO eventDTO = eventService.findByID(scheduleDTO.getEventId());
+            schedule.setEvent(converter.convertToEntity(eventDTO));
+        }
+
+        schedule = scheduleRepository.save(schedule); // Salva a atualização no banco
+        return converter.convertToDTO(schedule);      // Retorna o DTO atualizado
+    }
+
 }
