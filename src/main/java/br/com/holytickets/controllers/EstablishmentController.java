@@ -1,15 +1,16 @@
 package br.com.holytickets.controllers;
 
 import br.com.holytickets.dto.EstablishmentDTO;
-import br.com.holytickets.dto.EventDTO;
 import br.com.holytickets.services.EstablishmentService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +31,12 @@ public class EstablishmentController {
         return ResponseEntity.ok(establishmentDTO);
     }
 
+    @GetMapping("/room/{id}")
+    public ResponseEntity<Map<Character, String>> getSeatChart(@PathVariable UUID id) throws JsonProcessingException {
+        Map<Character, String> namedRows = establishmentService.getDefaultSeatChart(id);
+        return ResponseEntity.ok(namedRows);
+    }
+
 
     @GetMapping("/name/{name}")
     public ResponseEntity<List<EstablishmentDTO>> findEstablishmentByName(@PathVariable String name) {
@@ -43,6 +50,7 @@ public class EstablishmentController {
         EstablishmentDTO updated = establishmentService.update(id, establishmentDTO);
         return ResponseEntity.ok(updated);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         establishmentService.deleteStab(id);
