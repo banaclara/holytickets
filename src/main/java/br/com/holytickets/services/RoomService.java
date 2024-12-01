@@ -5,6 +5,7 @@ import br.com.holytickets.dto.ScheduleDTO;
 import br.com.holytickets.models.Establishment;
 import br.com.holytickets.models.Schedule;
 import br.com.holytickets.models.Seat;
+import br.com.holytickets.repositories.ScheduleRepository;
 import br.com.holytickets.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.*;
 public class RoomService {
     private final ScheduleService scheduleService;
     private final EstablishmentService establishmentService;
+    private final ScheduleRepository scheduleRepository;
     private final Converter converter;
 
     private Establishment getEstablishment(UUID id) {
@@ -68,7 +70,8 @@ public class RoomService {
         return seatChart;
     }
 
-    public Map<Character, String> getAvailableSeatsChart(UUID establishmentId, UUID scheduleId) {
+    public Map<Character, String> getAvailableSeatsChart(UUID scheduleId) {
+        UUID estID = scheduleRepository.findEstablishmentIdByScheduleId(scheduleId);
         Schedule schedule = getSchedule(scheduleId);
         List<Seat> seats = schedule.getSeats();
         List<String> seatsSold = new ArrayList<>();
@@ -77,6 +80,12 @@ public class RoomService {
             seatsSold.add(seat.getSeatNumber());
         }
 
-        return getDefaultSeatChart(establishmentId, seatsSold);
+        return getDefaultSeatChart(estID, seatsSold);
+    }
+
+    public Establishment getEstablishmentBySchedule(UUID id){
+        UUID estID = scheduleRepository.findEstablishmentIdByScheduleId(id);
+        return getEstablishment(estID);
+
     }
 }
