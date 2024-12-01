@@ -42,6 +42,47 @@ public class Converter {
         return event;
     }
 
+    public ScheduleDTO convertToDTO(Schedule schedule) {
+        ScheduleDTO scheduleDTO = new ScheduleDTO();
+        scheduleDTO.setId((schedule.getId()));
+        scheduleDTO.setExhibitionDate(schedule.getExhibitionDate());
+
+        if (schedule.getEvent() != null) {
+            scheduleDTO.setEventId(schedule.getEvent().getId());
+        }
+
+        if (schedule.getSeats() != null) {
+            scheduleDTO.setSeats(
+                    schedule.getSeats().stream()
+                            .map(this::convertToDTO)
+                            .collect(Collectors.toList()));
+        } else {
+            scheduleDTO.setSeats(
+                    Collections.emptyList());
+        }
+        return scheduleDTO;
+    }
+
+    public Schedule convertToEntity(ScheduleDTO scheduleDTO) {
+        Schedule schedule = new Schedule();
+        schedule.setId(scheduleDTO.getId());
+        schedule.setExhibitionDate(scheduleDTO.getExhibitionDate());
+        if (scheduleDTO.getEventId() != null) {
+            Event event = new Event();
+            event.setId(scheduleDTO.getEventId());
+            schedule.setEvent(event);
+        }
+        if (scheduleDTO.getSeats() != null) {
+            schedule.setSeats(scheduleDTO.getSeats().stream()
+                    .map(this::convertToEntity)
+                    .collect(Collectors.toList()));
+        } else {
+            schedule.setSeats(Collections.emptyList());
+        }
+
+        return schedule;
+    }
+
     public EstablishmentDTO convertToDTO(Establishment establishment) {
         return new EstablishmentDTO(
                 establishment.getId(),
@@ -143,30 +184,6 @@ public class Converter {
                 seatDTO.getId(),
                 seatDTO.getSeatNumber(),
                 convertToEntity(seatDTO.getSchedule())
-        );
-    }
-
-    public ScheduleDTO convertToDTO(Schedule schedule) {
-        return new ScheduleDTO(
-                schedule.getId(),
-                schedule.getExhibitionDate(),
-                convertToDTO(schedule.getEvent()),
-                schedule.getSeats() != null ?
-                        schedule.getSeats().stream()
-                                .map(this::convertToDTO)
-                                .collect(Collectors.toList()) : Collections.emptyList()
-        );
-    }
-
-    public Schedule convertToEntity(ScheduleDTO scheduleDTO) {
-        return new Schedule(
-                scheduleDTO.getId(),
-                scheduleDTO.getExhibitionDate(),
-                convertToEntity(scheduleDTO.getEvent()),
-                scheduleDTO.getSeats() != null ?
-                        scheduleDTO.getSeats().stream()
-                                .map(this::convertToEntity)
-                                .collect(Collectors.toList()) : Collections.emptyList()
         );
     }
 

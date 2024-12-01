@@ -24,7 +24,7 @@ public class Schedule {
     private LocalDateTime exhibitionDate;
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", referencedColumnName = "id", nullable = false)
     private Event event;
 
     @OneToMany(mappedBy = "schedule")

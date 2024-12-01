@@ -1,8 +1,11 @@
 package br.com.holytickets.services;
 
-import br.com.holytickets.exception.ResourceNotFoundException;
+import br.com.holytickets.dto.EstablishmentDTO;
+import br.com.holytickets.dto.ScheduleDTO;
 import br.com.holytickets.models.Establishment;
-import br.com.holytickets.repositories.EstablishmentRepository;
+import br.com.holytickets.models.Schedule;
+import br.com.holytickets.models.Seat;
+import br.com.holytickets.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +14,22 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class RoomService {
-    private final EstablishmentRepository establishmentRepository;
+    private final ScheduleService scheduleService;
+    private final EstablishmentService establishmentService;
+    private final Converter converter;
 
-    public Map<Character, String> getDefaultSeatChart(UUID id) {
-        Establishment establishment = establishmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + id + " not found."));
+    private Establishment getEstablishment(UUID id) {
+        EstablishmentDTO estDTO = establishmentService.findByID(id);
+        return converter.convertToEntity(estDTO);
+    }
+
+    private Schedule getSchedule(UUID id) {
+        ScheduleDTO schDTO = scheduleService.findById(id);
+        return converter.convertToEntity(schDTO);
+    }
+
+    public Map<Character, String> getDefaultSeatChart(UUID id, List<String> seatsSold) {
+        Establishment establishment = getEstablishment(id);
         Integer rows = establishment.getRoom().getRows();
         Integer columns = establishment.getRoom().getColumns();
 
@@ -37,25 +51,32 @@ public class RoomService {
             numberedColumns.add(numero);
         }
 
-
         Map<Character, String> seatChart = new HashMap<>();
         seatChart.put('0', "----------------------------------------");
-
-
         for (int i = 0; i < rows; i++) {
-            List<String> seatList = new ArrayList<>();
             String seats = "";
             for (int j = 0; j < columns; j++) {
                 String s = namedRows.get(i) + numberedColumns.get(j);
-                seatList.add(s);
+                if (seatsSold.contains(s)) {
+                    s = "[X]";
+                }
                 seats += s + " ";
             }
 
-            //String seats = mapper.writeValueAsString(seatList);
             seatChart.put(namedRows.get(i), seats);
         }
-
-
         return seatChart;
+    }
+
+    public Map<Character, String> getAvailableSeatsChart(UUID establishmentId, UUID scheduleId) {
+        Schedule schedule = getSchedule(scheduleId);
+        List<Seat> seats = schedule.getSeats();
+        List<String> seatsSold = new ArrayList<>();
+        for (int i = 0; i < seats.size(); i++) {
+            Seat seat = seats.get(i);
+            seatsSold.add(seat.getSeatNumber());
+        }
+
+        return getDefaultSeatChart(establishmentId, seatsSold);
     }
 }
