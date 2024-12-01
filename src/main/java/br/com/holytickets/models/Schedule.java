@@ -27,6 +27,6 @@ public class Schedule {
     @JoinColumn(name = "event_id", referencedColumnName = "id", nullable = false)
     private Event event;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER)
     private List<Seat> seats;
 }
