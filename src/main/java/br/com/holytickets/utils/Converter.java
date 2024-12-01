@@ -150,7 +150,6 @@ public class Converter {
         return new ScheduleDTO(
                 schedule.getId(),
                 schedule.getExhibitionDate(),
-                schedule.getRoom(),
                 convertToDTO(schedule.getEvent()),
                 schedule.getSeats() != null ?
                         schedule.getSeats().stream()
@@ -163,7 +162,6 @@ public class Converter {
         return new Schedule(
                 scheduleDTO.getId(),
                 scheduleDTO.getExhibitionDate(),
-                scheduleDTO.getRoom(),
                 convertToEntity(scheduleDTO.getEvent()),
                 scheduleDTO.getSeats() != null ?
                         scheduleDTO.getSeats().stream()
