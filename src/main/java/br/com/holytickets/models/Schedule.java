@@ -23,8 +23,6 @@ public class Schedule {
     @NotNull(message = "Exhibition date is required")
     private LocalDateTime exhibitionDate;
 
-    private String room;
-
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;

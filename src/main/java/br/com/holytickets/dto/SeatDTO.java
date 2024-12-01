@@ -12,6 +12,5 @@ import java.util.UUID;
 public class SeatDTO {
     private UUID id;
     private String seatNumber;
-    private boolean available;
     private ScheduleDTO schedule;
 }

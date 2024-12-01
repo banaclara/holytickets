@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "seats")
+@Table(name = "seats_sold")
 public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,8 +20,6 @@ public class Seat {
 
     @NotNull(message = "Seat number is required")
     private String seatNumber;
-
-    private boolean available;
 
     @ManyToOne
     @JoinColumn(name = "schedule_id")

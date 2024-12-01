@@ -29,11 +29,11 @@ public class Establishment {
     @NotNull(message = "Password is required")
     private String password;
 
-    @NotNull(message = "Capacity is required")
-    private Integer capacity;
-
     private String contactNumber;
 
     @Embedded
     private Address address;
+
+    @Embedded
+    private Room room;
 }

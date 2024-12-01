@@ -48,19 +48,19 @@ public class Converter {
                 establishment.getName(),
                 establishment.getEmail(),
                 establishment.getPassword(),
-                establishment.getCapacity(),
                 establishment.getContactNumber(),
-                convertToDTO(establishment.getAddress())
+                convertToDTO(establishment.getAddress()),
+                convertToDTO(establishment.getRoom())
         );
     }
 
-    public AddressDTO convertToDTO(Address adress) {
+    public AddressDTO convertToDTO(Address address) {
         return new AddressDTO(
-                adress.getStreet(),
-                adress.getNumber(),
-                adress.getCity(),
-                adress.getState(),
-                adress.getCountry()
+                address.getStreet(),
+                address.getNumber(),
+                address.getCity(),
+                address.getState(),
+                address.getCountry()
         );
     }
 
@@ -70,9 +70,9 @@ public class Converter {
                 establishmentDTO.getName(),
                 establishmentDTO.getEmail(),
                 establishmentDTO.getPassword(),
-                establishmentDTO.getCapacity(),
                 establishmentDTO.getContactNumber(),
-                convertToEntity(establishmentDTO.getAddress())
+                convertToEntity(establishmentDTO.getAddress()),
+                convertToEntity(establishmentDTO.getRoom())
         );
     }
 
@@ -134,7 +134,6 @@ public class Converter {
         return new SeatDTO(
                 seat.getId(),
                 seat.getSeatNumber(),
-                seat.isAvailable(),
                 convertToDTO(seat.getSchedule())
         );
     }
@@ -143,7 +142,6 @@ public class Converter {
         return new Seat(
                 seatDTO.getId(),
                 seatDTO.getSeatNumber(),
-                seatDTO.isAvailable(),
                 convertToEntity(seatDTO.getSchedule())
         );
     }
@@ -152,7 +150,6 @@ public class Converter {
         return new ScheduleDTO(
                 schedule.getId(),
                 schedule.getExhibitionDate(),
-                schedule.getRoom(),
                 convertToDTO(schedule.getEvent()),
                 schedule.getSeats() != null ?
                         schedule.getSeats().stream()
@@ -165,12 +162,26 @@ public class Converter {
         return new Schedule(
                 scheduleDTO.getId(),
                 scheduleDTO.getExhibitionDate(),
-                scheduleDTO.getRoom(),
                 convertToEntity(scheduleDTO.getEvent()),
                 scheduleDTO.getSeats() != null ?
                         scheduleDTO.getSeats().stream()
                                 .map(this::convertToEntity)
                                 .collect(Collectors.toList()) : Collections.emptyList()
+        );
+    }
+
+    public Room convertToEntity(RoomDTO roomDTO) {
+        return new Room(
+                roomDTO.getRows(),
+                roomDTO.getColumns()
+
+        );
+    }
+
+    public RoomDTO convertToDTO(Room room) {
+        return new RoomDTO(
+                room.getColumns(),
+                room.getRows()
         );
     }
 }

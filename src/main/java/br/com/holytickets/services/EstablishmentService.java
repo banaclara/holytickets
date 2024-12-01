@@ -71,7 +71,6 @@ public class EstablishmentService {
 
         establishment.setName(establishmentDTO.getName());
         establishment.setEmail(establishmentDTO.getEmail());
-        establishment.setCapacity(establishmentDTO.getCapacity());
         establishment.setContactNumber(establishmentDTO.getContactNumber());
 
         Establishment updatedEstablishment = establishmentRepository.save(establishment);
