@@ -7,12 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
 @Service
 @RequiredArgsConstructor
 public class RoomService {
     private final EstablishmentRepository establishmentRepository;
 
-    public Map<Character, String> getDefaultSeatChart(UUID id){
+    public Map<Character, String> getDefaultSeatChart(UUID id) {
         Establishment establishment = establishmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + id + " not found."));
         Integer rows = establishment.getRoom().getRows();
@@ -38,7 +39,7 @@ public class RoomService {
 
 
         Map<Character, String> seatChart = new HashMap<>();
-
+        seatChart.put('0', "----------------------------------------");
 
 
         for (int i = 0; i < rows; i++) {
