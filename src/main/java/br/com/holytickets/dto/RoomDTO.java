@@ -10,14 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomDTO {
-
-    @Min(1)
     @NotBlank(message = "Room must have at least one column")
     private int columns;
 
-    @Min(1)
-    @Max(26)
     @NotBlank(message = "Room must have 1 to 26 rows")
     private int rows;
-
 }

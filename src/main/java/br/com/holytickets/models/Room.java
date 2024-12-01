@@ -12,12 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Room {
-
     @NotNull(message = "Row is requited")
     private Integer rows;
 
     @NotNull(message = "Column is requited")
     private Integer columns;
-
-
 }
