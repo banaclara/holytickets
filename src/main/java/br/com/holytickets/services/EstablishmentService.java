@@ -6,12 +6,14 @@ import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.models.Establishment;
 import br.com.holytickets.repositories.EstablishmentRepository;
 import br.com.holytickets.utils.Converter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -84,4 +86,5 @@ public class EstablishmentService {
 
         establishmentRepository.delete(establishment);
     }
+
 }

@@ -1,7 +1,6 @@
 package br.com.holytickets.controllers;
 
 import br.com.holytickets.dto.EstablishmentDTO;
-import br.com.holytickets.dto.EventDTO;
 import br.com.holytickets.services.EstablishmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -30,7 +28,6 @@ public class EstablishmentController {
         return ResponseEntity.ok(establishmentDTO);
     }
 
-
     @GetMapping("/name/{name}")
     public ResponseEntity<List<EstablishmentDTO>> findEstablishmentByName(@PathVariable String name) {
         List<EstablishmentDTO> establishments = establishmentService.findByName(name.trim().toLowerCase());
@@ -43,6 +40,7 @@ public class EstablishmentController {
         EstablishmentDTO updated = establishmentService.update(id, establishmentDTO);
         return ResponseEntity.ok(updated);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         establishmentService.deleteStab(id);
