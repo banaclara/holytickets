@@ -10,7 +10,9 @@ import br.com.holytickets.utils.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,11 +20,10 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final Converter converter;
-
     private final EventService eventService;
 
+    // Método para registrar um agendamento
     public ScheduleDTO register(ScheduleDTO scheduleDTO) {
-//checar se existe por event e por data
         if (scheduleDTO.getEventId() == null) {
             throw new ResourceNotFoundException("The event ID was not provided.");
         }
@@ -34,12 +35,27 @@ public class ScheduleService {
 
         schedule = scheduleRepository.save(schedule);
         return converter.convertToDTO(schedule);
-
     }
 
+    // Método para buscar um agendamento por ID
     public ScheduleDTO findById(UUID id) {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + id + " not found."));
+
+        // Inicializa a coleção seats explicitamente
+        schedule.getSeats().size();  // Isso força o carregamento dos seats
+
         return converter.convertToDTO(schedule);
+    }
+
+    // Método para listar todos os agendamentos
+    public List<ScheduleDTO> findAll() {
+        // Obtém todos os agendamentos do banco de dados
+        List<Schedule> schedules = scheduleRepository.findAll();
+
+        // Converte cada agendamento para um DTO
+        return schedules.stream()
+                .map(converter::convertToDTO) // Usa o conversor para converter cada entidade em DTO
+                .collect(Collectors.toList()); // Retorna a lista de DTOs
     }
 }
