@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/event/**").permitAll()
                         .requestMatchers("/room/**").permitAll()
                         .requestMatchers("/schedule/**").permitAll()
+                        .requestMatchers("/ticket/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

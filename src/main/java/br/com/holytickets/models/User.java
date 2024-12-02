@@ -1,5 +1,6 @@
 package br.com.holytickets.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -27,9 +28,11 @@ public class User {
     @NotNull(message = "Email is required")
     private String email;
 
+    @JsonIgnore
     @NotNull(message = "Password is required")
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Ticket> tickets;
 }

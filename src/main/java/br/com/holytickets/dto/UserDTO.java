@@ -1,5 +1,6 @@
 package br.com.holytickets.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ public class UserDTO {
     private UUID id;
     private String name;
     private String email;
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private List<TicketDTO> tickets;
 }

@@ -172,19 +172,23 @@ public class Converter {
     }
 
     public SeatDTO convertToDTO(Seat seat) {
-        return new SeatDTO(
-                seat.getId(),
-                seat.getSeatNumber(),
-                convertToDTO(seat.getSchedule())
-        );
+        SeatDTO seatDTO = new SeatDTO();
+        seatDTO.setId(seat.getId());
+        seatDTO.setSeatNumber(seat.getSeatNumber());
+        seatDTO.setScheduleId(seat.getSchedule().getId());
+        return seatDTO;
     }
 
     public Seat convertToEntity(SeatDTO seatDTO) {
-        return new Seat(
-                seatDTO.getId(),
-                seatDTO.getSeatNumber(),
-                convertToEntity(seatDTO.getSchedule())
-        );
+        Seat seat = new Seat();
+        seat.setId(seatDTO.getId());
+        seat.setSeatNumber(seatDTO.getSeatNumber());
+        if (seatDTO.getScheduleId() != null) {
+            Schedule schedule = new Schedule();
+            schedule.setId(seatDTO.getScheduleId());
+            seat.setSchedule(schedule);
+        }
+        return seat;
     }
 
     public Room convertToEntity(RoomDTO roomDTO) {
