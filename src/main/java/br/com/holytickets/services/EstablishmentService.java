@@ -21,21 +21,23 @@ import java.util.stream.Collectors;
 public class EstablishmentService {
     private final EstablishmentRepository establishmentRepository;
     private final Converter converter;
-    private final PasswordEncoder passwordEncoder;
 
     public EstablishmentDTO register(EstablishmentDTO dto) {
-
         if (!establishmentRepository.findByName(dto.getName()).isEmpty()) {
             throw new ConflictException("An establishment with the name " + dto.getName() + " already exists.");
         }
+
+        int rows = dto.getRoom().getRows();
+        int columns = dto.getRoom().getColumns();
+
+        if (rows <= 0 || columns <= 0) {
+            throw new ConflictException("Room rows and columns must be greater than zero.");
+        } else if (rows > 26) {
+            throw new ConflictException("Room rows can't be more than 26.");
+        }
+
         Establishment establishment = converter.convertToEntity(dto);
         return converter.convertToDTO(establishmentRepository.save(establishment));
-    }
-
-    public boolean validateCredentials(String email, String password) {
-        return establishmentRepository.findByEmail(email)
-                .map(establishment -> passwordEncoder.matches(password, establishment.getPassword()))
-                .orElse(false);
     }
 
     public List<EstablishmentDTO> list() {

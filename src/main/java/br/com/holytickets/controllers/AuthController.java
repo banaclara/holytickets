@@ -1,5 +1,6 @@
 package br.com.holytickets.controllers;
 
+import br.com.holytickets.dto.AuthDetails;
 import br.com.holytickets.dto.EstablishmentDTO;
 import br.com.holytickets.dto.LoginCredentials;
 import br.com.holytickets.dto.UserDTO;
@@ -28,7 +29,7 @@ public class AuthController {
     public ResponseEntity<String> registerUser(@RequestBody @Valid UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         UserDTO createdUser = userService.create(userDTO);
-        String token = jwtUtils.generateToken(createdUser.getEmail(), "USER");
+        String token = jwtUtils.generateToken(createdUser.getEmail(), createdUser.getId(), "USER");
         return ResponseEntity.ok(token);
     }
 
@@ -36,15 +37,16 @@ public class AuthController {
     public ResponseEntity<String> registerEstablishment(@RequestBody @Valid EstablishmentDTO establishmentDTO) {
         establishmentDTO.setPassword(passwordEncoder.encode(establishmentDTO.getPassword()));
         EstablishmentDTO createdEstablishment = establishmentService.register(establishmentDTO);
-        String token = jwtUtils.generateToken(createdEstablishment.getEmail(), "ESTABLISHMENT");
+        String token = jwtUtils.generateToken(createdEstablishment.getEmail(), createdEstablishment.getId(), "ESTABLISHMENT");
         return ResponseEntity.ok(token);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid LoginCredentials credentials) {
-        String role = authService.findRoleByEmail(credentials.getEmail());
-        authService.validateCredentials(credentials.getEmail(), credentials.getPassword(), role);
-        String token = jwtUtils.generateToken(credentials.getEmail(), role);
+
+        AuthDetails authDetails = authService.validateAuth(credentials.getEmail(), credentials.getPassword());
+        String token = jwtUtils.generateToken(credentials.getEmail(), authDetails.getId(), authDetails.getRole());
+
         return ResponseEntity.ok(token);
     }
 }

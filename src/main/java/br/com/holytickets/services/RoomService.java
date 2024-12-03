@@ -77,6 +77,7 @@ public class RoomService {
             }
             seatChart.put(namedRows.get(i), seats.toString());
         }
+
         return seatChart;
     }
 
