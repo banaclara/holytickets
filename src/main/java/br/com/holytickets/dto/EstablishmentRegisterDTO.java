@@ -28,5 +28,7 @@ public class EstablishmentRegisterDTO {
 
     private String cep;
 
+    private String number;
+
     private RoomDTO room;
 }

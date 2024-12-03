@@ -39,19 +39,15 @@ public class EstablishmentService {
             throw new ConflictException("Room rows can't be more than 26.");
         }
 
-        // Busca os dados do endereço pelo CEP
         String cep = dto.getCep();
         CepDTO cepDTO = viaCepClient.buscarEnderecoPorCep(cep);
 
-        // Verifica se a API retornou uma resposta válida
         if (cepDTO == null || cepDTO.getLogradouro() == null) {
             throw new ResourceNotFoundException("Invalid CEP: No address found for CEP " + cep);
         }
 
-        // Mapeia o endereço e atualiza o DTO
-        AddressDTO addressDTO = converter.mapCepToAddressDTO(cepDTO);
+        AddressDTO addressDTO = converter.mapCepToAddressDTO(cepDTO, dto.getNumber());
 
-        // Salva o estabelecimento
         Establishment establishment = converter.convertToEntity(dto, addressDTO);
         return converter.convertToDTO(establishmentRepository.save(establishment));
     }

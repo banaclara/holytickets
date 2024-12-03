@@ -138,13 +138,13 @@ public class Converter {
         );
     }
 
-    public AddressDTO mapCepToAddressDTO(CepDTO cepDTO) {
+    public AddressDTO mapCepToAddressDTO(CepDTO cepDTO, String number) {
         return new AddressDTO(
-                cepDTO.getLogradouro(),  // street
-                "S/N",                   // Número fixo; ajuste conforme necessário
-                cepDTO.getLocalidade(),  // city
-                cepDTO.getUf(),          // state
-                "Brazil"
+                cepDTO.getLogradouro(),
+                number,
+                cepDTO.getLocalidade(),
+                cepDTO.getUf(),
+                "Brasil"
         );
     }
 
