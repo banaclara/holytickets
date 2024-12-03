@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class EstablishmentService {
     private final EstablishmentRepository establishmentRepository;
     private final Converter converter;
-    private final PasswordEncoder passwordEncoder;
 
     public EstablishmentDTO register(EstablishmentDTO dto) {
         if (!establishmentRepository.findByName(dto.getName()).isEmpty()) {
