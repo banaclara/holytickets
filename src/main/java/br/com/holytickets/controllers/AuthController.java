@@ -36,13 +36,8 @@ public class AuthController {
     @PostMapping("/register/establishment")
     public ResponseEntity<String> registerEstablishment(@RequestBody @Valid EstablishmentDTO establishmentDTO) {
         establishmentDTO.setPassword(passwordEncoder.encode(establishmentDTO.getPassword()));
-
-        // Chama o serviço para registrar o estabelecimento
         EstablishmentDTO createdEstablishment = establishmentService.register(establishmentDTO);
-
-        // Geração do token JWT após o registro
         String token = jwtUtils.generateToken(createdEstablishment.getEmail(), "ESTABLISHMENT");
-
         return ResponseEntity.ok(token);
     }
 
