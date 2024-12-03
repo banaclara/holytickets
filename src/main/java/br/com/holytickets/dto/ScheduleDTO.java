@@ -1,11 +1,11 @@
 package br.com.holytickets.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,8 +14,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScheduleDTO {
     private UUID id;
-    
-    private LocalDateTime exhibitionDate;
+
+    @Schema(example = "dd/mm/aaa HH:MM")
+    private String exhibitionDate;
 
     private UUID eventId;
 

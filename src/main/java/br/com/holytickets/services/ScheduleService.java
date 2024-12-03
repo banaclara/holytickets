@@ -7,6 +7,7 @@ import br.com.holytickets.models.Event;
 import br.com.holytickets.models.Schedule;
 import br.com.holytickets.repositories.ScheduleRepository;
 import br.com.holytickets.utils.Converter;
+import br.com.holytickets.utils.DateFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-
     private final ScheduleRepository scheduleRepository;
     private final Converter converter;
     private final EventService eventService;
+    private final DateFormatter dateFormatter;
 
     public ScheduleDTO register(ScheduleDTO scheduleDTO) {
         if (scheduleDTO.getEventId() == null) {
@@ -63,7 +64,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + id + " not found."));
 
-        schedule.setExhibitionDate(scheduleDTO.getExhibitionDate());
+        schedule.setExhibitionDate(dateFormatter.convertStringToLocalDateTime(scheduleDTO.getExhibitionDate()));
         if (scheduleDTO.getEventId() != null) {
             EventDTO eventDTO = eventService.findByID(scheduleDTO.getEventId());
             schedule.setEvent(converter.convertToEntity(eventDTO));

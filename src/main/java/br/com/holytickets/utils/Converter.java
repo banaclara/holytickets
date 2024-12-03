@@ -2,13 +2,16 @@ package br.com.holytickets.utils;
 
 import br.com.holytickets.dto.*;
 import br.com.holytickets.models.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class Converter {
+    private final DateFormatter dateFormatter;
 
     public EventDTO convertToDTO(Event event) {
         EventDTO eventDTO = new EventDTO();
@@ -45,7 +48,7 @@ public class Converter {
     public ScheduleDTO convertToDTO(Schedule schedule) {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         scheduleDTO.setId((schedule.getId()));
-        scheduleDTO.setExhibitionDate(schedule.getExhibitionDate());
+        scheduleDTO.setExhibitionDate(dateFormatter.convertLocalDateTimeToString(schedule.getExhibitionDate()));
 
         if (schedule.getEvent() != null) {
             scheduleDTO.setEventId(schedule.getEvent().getId());
@@ -66,7 +69,7 @@ public class Converter {
     public Schedule convertToEntity(ScheduleDTO scheduleDTO) {
         Schedule schedule = new Schedule();
         schedule.setId(scheduleDTO.getId());
-        schedule.setExhibitionDate(scheduleDTO.getExhibitionDate());
+        schedule.setExhibitionDate(dateFormatter.convertStringToLocalDateTime(scheduleDTO.getExhibitionDate()));
         if (scheduleDTO.getEventId() != null) {
             Event event = new Event();
             event.setId(scheduleDTO.getEventId());
