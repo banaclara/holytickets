@@ -53,7 +53,7 @@ public class RoomService {
 
         List<Character> namedRows = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
-            char letra = (char) ('A' + (i % 26));
+            char letra = (char) ('A' + (i % 26)); // Usa 'A' como base para letras maiúsculas
             namedRows.add(letra);
         }
 
