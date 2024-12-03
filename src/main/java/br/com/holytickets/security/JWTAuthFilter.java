@@ -47,7 +47,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
         DecodedJWT jwt = JWT.decode(token);
         String email = jwt.getSubject();
-        String role = authService.findRoleByEmail(email).orElse(null);
+        String role = authService.findRoleByEmail(email);
 
         if (email != null && role != null) {
             return new UsernamePasswordAuthenticationToken(email, null, List.of(() -> role));

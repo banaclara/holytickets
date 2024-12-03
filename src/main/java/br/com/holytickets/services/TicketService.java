@@ -31,7 +31,6 @@ public class TicketService {
     private final Converter converter;
 
     public TicketDTO sellTicket(TicketDTO ticketDTO) {
-        //verificar se o schedule existe
         UUID scheduleId = ticketDTO.getSeat().getScheduleId();
         if (scheduleId == null) {
             throw new BadRequestException("The schedule ID was not provided.");
@@ -39,7 +38,6 @@ public class TicketService {
         ScheduleDTO scheduleDTO = scheduleService.findById(scheduleId);
 
 
-        //verificar se o assento naquele schedule já foi vendido
         Optional<List<String>> seatsSold = seatRepository.findSeatsSold(scheduleDTO.getId());
         String seatNumber = ticketDTO.getSeat().getSeatNumber();
         seatsSold.ifPresent(seats -> {
@@ -49,7 +47,6 @@ public class TicketService {
         });
 
 
-        //verificar se o user existe
         UUID userId = ticketDTO.getUserId();
         if (userId == null) {
             throw new BadRequestException("The user ID was not provided.");
@@ -58,7 +55,6 @@ public class TicketService {
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found."));
 
 
-        //se tudo passar, criar um ticket e instanciar o seat_sold
         ticketDTO.setPurchaseDate(LocalDateTime.now());
 
         Seat seat = converter.convertToEntity(ticketDTO.getSeat());
@@ -85,7 +81,6 @@ public class TicketService {
 
         PrintTicketDTO printTicketDTO = ticketInfos.get();
 
-        //formata data e hora
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         String formattedPurchaseDate = ticketInfos.get().getPurchaseDate().format(formatter);
         String formattedExhibitionDate = ticketInfos.get().getExhibitionDate().format(formatter);
