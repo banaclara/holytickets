@@ -10,11 +10,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrintTicketDTO {
-    UUID ticketId;
-    String establishmentName;
-    String eventName;
-    LocalDateTime exhibitionDate;
-    String seatNumber;
-    LocalDateTime purchaseDate;
-    String userName;
+    UUID id;
+    String establishment_name;
+    String event_title;
+    String exhibition_date;
+    String seat_number;
+    String purchase_date;
+    String user_name;
 }

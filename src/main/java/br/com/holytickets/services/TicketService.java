@@ -3,7 +3,6 @@ package br.com.holytickets.services;
 import br.com.holytickets.dto.*;
 import br.com.holytickets.exception.BadRequestException;
 import br.com.holytickets.exception.ResourceNotFoundException;
-import br.com.holytickets.models.Schedule;
 import br.com.holytickets.models.Seat;
 import br.com.holytickets.models.Ticket;
 import br.com.holytickets.models.User;
@@ -11,9 +10,11 @@ import br.com.holytickets.repositories.SeatRepository;
 import br.com.holytickets.repositories.TicketRepository;
 import br.com.holytickets.repositories.UserRepository;
 import br.com.holytickets.utils.Converter;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -73,25 +74,31 @@ public class TicketService {
 
         return ticketDTO;
     }
+
     public PrintTicketDTO printTicket(UUID id) {
-        Optional<PrintTicketDTO> ticketInfos = ticketRepository.getPrintTicketInfos(id);
-        if (ticketInfos.isEmpty()){
-            throw new ResourceNotFoundException("ticket with ID " + id + " not found.");
-        }
-
-        PrintTicketDTO printTicketDTO = ticketInfos.get();
-
+        Tuple tuple = ticketRepository.findRawPrintTicketById(id);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String formattedPurchaseDate = ticketInfos.get().getPurchaseDate().format(formatter);
-        String formattedExhibitionDate = ticketInfos.get().getExhibitionDate().format(formatter);
+        //bd retorna Timestamp, passar para LocalDateTime para conseguir formatar a string
+        Timestamp exhibition = tuple.get("exhibition_date", Timestamp.class);
+        Timestamp purchase = tuple.get("purchase_date", Timestamp.class);
 
-        /*printedTicket.setEstablishmentName();
-        printedTicket.setEventName();
-        printedTicket.setExhibitionDate();
-        printedTicket.setSeatNumber();
-        printedTicket.setUserName();
-        printedTicket.setPurchaseDate();*/
+        LocalDateTime exhibitionDate = exhibition != null ? exhibition.toLocalDateTime() : null;
+        LocalDateTime purchaseDate = purchase != null ? purchase.toLocalDateTime() : null;
 
-        return printTicketDTO;
+        assert exhibitionDate != null;
+        String exhibitionDateTextFormatted = exhibitionDate.format(formatter);
+        assert purchaseDate != null;
+        String purchaseDateTextFormatted = purchaseDate.format(formatter);
+
+
+        return new PrintTicketDTO(
+                tuple.get("id", UUID.class),
+                tuple.get("establishment_name", String.class),
+                tuple.get("event_title", String.class),
+                exhibitionDateTextFormatted,
+                tuple.get("seat_number", String.class),
+                purchaseDateTextFormatted,
+                tuple.get("user_name", String.class)
+        );
     }
 }
