@@ -43,14 +43,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid LoginCredentials credentials) {
 
-        // Encontrar o papel do usuário
         String role = authService.findRoleByEmail(credentials.getEmail());
 
-        // Validar as credenciais usando o AuthService
         boolean isValid = authService.validateCredentials(credentials.getEmail(), credentials.getPassword(), role);
-
-
-
             String token = jwtUtils.generateToken(credentials.getEmail(), role);
             return ResponseEntity.ok(token);
 
