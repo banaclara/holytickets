@@ -16,11 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScheduleDTO {
     private UUID id;
-    
     private LocalDateTime exhibitionDate;
-
     private UUID eventId;
-
     @JsonIgnore
     private List<SeatDTO> seats;
 }

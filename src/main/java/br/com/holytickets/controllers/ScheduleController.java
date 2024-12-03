@@ -15,7 +15,6 @@ import java.util.UUID;
 @RequestMapping("/schedule")
 @RequiredArgsConstructor
 public class ScheduleController {
-
     private final ScheduleService scheduleService;
 
     @PostMapping("/register")

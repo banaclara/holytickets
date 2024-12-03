@@ -26,7 +26,6 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final SeatRepository seatRepository;
     private final ScheduleService scheduleService;
-
     private final UserRepository userRepository;
     private final Converter converter;
 
