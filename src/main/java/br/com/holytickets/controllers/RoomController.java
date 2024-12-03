@@ -32,10 +32,4 @@ public class RoomController {
         Map<Character, String> seatChart = roomService.getAvailableSeatsChart(scheduleId);
         return ResponseEntity.ok(seatChart);
     }
-
-    @GetMapping("/establishmentBySchedule/{id}")
-    public ResponseEntity<Establishment> getEstabishmentBySchedule(@PathVariable UUID id) {
-        Establishment establishment = roomService.getEstablishmentBySchedule(id);
-        return ResponseEntity.ok(establishment);
-    }
 }

@@ -16,9 +16,11 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping("/sell")
-    public ResponseEntity<TicketDTO> sellTicket(@RequestBody TicketDTO ticketDTO) {
+    public ResponseEntity<PrintTicketDTO> sellTicket(@RequestBody TicketDTO ticketDTO) {
         TicketDTO ticketSold = ticketService.sellTicket(ticketDTO);
-        return ResponseEntity.ok(ticketSold);
+        UUID id = ticketSold.getId();
+        PrintTicketDTO printTicketDTO = ticketService.printTicket(id);
+        return ResponseEntity.ok(printTicketDTO);
     }
 
     @GetMapping("/print/{id}")

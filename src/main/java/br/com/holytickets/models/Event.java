@@ -30,7 +30,7 @@ public class Event {
     @NotNull(message = "Description is required")
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "establishment_id", referencedColumnName = "id", nullable = false)
     private Establishment establishment;
 }

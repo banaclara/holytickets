@@ -39,6 +39,6 @@ public class Establishment {
     @Embedded
     private Room room;
 
-    @OneToMany(mappedBy = "establishment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "establishment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Event> events;
 }
