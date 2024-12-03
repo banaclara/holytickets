@@ -1,14 +1,15 @@
 package br.com.holytickets.services;
 
+import br.com.holytickets.client.ViaCepClient;
+import br.com.holytickets.dto.AddressDTO;
+import br.com.holytickets.dto.CepDTO;
 import br.com.holytickets.dto.EstablishmentDTO;
+import br.com.holytickets.dto.EstablishmentRegisterDTO;
 import br.com.holytickets.exception.ConflictException;
 import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.models.Establishment;
 import br.com.holytickets.repositories.EstablishmentRepository;
 import br.com.holytickets.utils.Converter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EstablishmentService {
+
     private final EstablishmentRepository establishmentRepository;
     private final Converter converter;
-    private final PasswordEncoder passwordEncoder;
+    private final ViaCepClient viaCepClient;
 
-    public EstablishmentDTO register(EstablishmentDTO dto) {
+    public EstablishmentDTO register(EstablishmentRegisterDTO dto) {
         if (!establishmentRepository.findByName(dto.getName()).isEmpty()) {
             throw new ConflictException("An establishment with the name " + dto.getName() + " already exists.");
         }
@@ -37,7 +39,16 @@ public class EstablishmentService {
             throw new ConflictException("Room rows can't be more than 26.");
         }
 
-        Establishment establishment = converter.convertToEntity(dto);
+        String cep = dto.getCep();
+        CepDTO cepDTO = viaCepClient.buscarEnderecoPorCep(cep);
+
+        if (cepDTO == null || cepDTO.getLogradouro() == null) {
+            throw new ResourceNotFoundException("Invalid CEP: No address found for CEP " + cep);
+        }
+
+        AddressDTO addressDTO = converter.mapCepToAddressDTO(cepDTO, dto.getNumber());
+
+        Establishment establishment = converter.convertToEntity(dto, addressDTO);
         return converter.convertToDTO(establishmentRepository.save(establishment));
     }
 
@@ -89,5 +100,4 @@ public class EstablishmentService {
 
         establishmentRepository.delete(establishment);
     }
-
 }

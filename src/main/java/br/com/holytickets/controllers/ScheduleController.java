@@ -1,5 +1,6 @@
 package br.com.holytickets.controllers;
 
+import br.com.holytickets.dto.ExhibitionDateDTO;
 import br.com.holytickets.dto.ScheduleDTO;
 import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.services.ScheduleService;
@@ -46,8 +47,8 @@ public class ScheduleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ScheduleDTO> update(@PathVariable UUID id, @Valid @RequestBody ScheduleDTO scheduleDTO) {
-        ScheduleDTO updatedSchedule = scheduleService.update(id, scheduleDTO);
+    public ResponseEntity<ScheduleDTO> update(@PathVariable UUID id, @Valid @RequestBody ExhibitionDateDTO exhibitionDate) {
+        ScheduleDTO updatedSchedule = scheduleService.update(id, exhibitionDate);
         return ResponseEntity.ok(updatedSchedule);
     }
 

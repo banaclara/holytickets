@@ -10,13 +10,13 @@ import br.com.holytickets.repositories.SeatRepository;
 import br.com.holytickets.repositories.TicketRepository;
 import br.com.holytickets.repositories.UserRepository;
 import br.com.holytickets.utils.Converter;
+import br.com.holytickets.utils.DateFormatter;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,9 +27,9 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final SeatRepository seatRepository;
     private final ScheduleService scheduleService;
-
     private final UserRepository userRepository;
     private final Converter converter;
+    private final DateFormatter dateFormatter;
 
     public TicketDTO sellTicket(TicketDTO ticketDTO) {
         UUID scheduleId = ticketDTO.getSeat().getScheduleId();
@@ -38,7 +38,6 @@ public class TicketService {
         }
         ScheduleDTO scheduleDTO = scheduleService.findById(scheduleId);
 
-
         Optional<List<String>> seatsSold = seatRepository.findSeatsSold(scheduleDTO.getId());
         String seatNumber = ticketDTO.getSeat().getSeatNumber();
         seatsSold.ifPresent(seats -> {
@@ -46,7 +45,6 @@ public class TicketService {
                 throw new BadRequestException("Seat " + seatNumber + " unavailable");
             }
         });
-
 
         UUID userId = ticketDTO.getUserId();
         if (userId == null) {
@@ -71,33 +69,22 @@ public class TicketService {
 
         ticketDTO = converter.convertToDTO(ticket);
 
-
         return ticketDTO;
     }
 
     public PrintTicketDTO printTicket(UUID id) {
         Tuple tuple = ticketRepository.findRawPrintTicketById(id);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        //bd retorna Timestamp, passar para LocalDateTime para conseguir formatar a string
-        Timestamp exhibition = tuple.get("exhibition_date", Timestamp.class);
-        Timestamp purchase = tuple.get("purchase_date", Timestamp.class);
 
-        LocalDateTime exhibitionDate = exhibition != null ? exhibition.toLocalDateTime() : null;
-        LocalDateTime purchaseDate = purchase != null ? purchase.toLocalDateTime() : null;
-
-        assert exhibitionDate != null;
-        String exhibitionDateTextFormatted = exhibitionDate.format(formatter);
-        assert purchaseDate != null;
-        String purchaseDateTextFormatted = purchaseDate.format(formatter);
-
+        String exhibition = dateFormatter.convertTimestampToString(tuple.get("exhibition_date", Timestamp.class));
+        String purchase = dateFormatter.convertTimestampToString(tuple.get("purchase_date", Timestamp.class));
 
         return new PrintTicketDTO(
                 tuple.get("id", UUID.class),
                 tuple.get("establishment_name", String.class),
                 tuple.get("event_title", String.class),
-                exhibitionDateTextFormatted,
+                exhibition,
                 tuple.get("seat_number", String.class),
-                purchaseDateTextFormatted,
+                purchase,
                 tuple.get("user_name", String.class)
         );
     }

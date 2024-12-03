@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -29,4 +30,6 @@ public class EstablishmentDTO {
     private AddressDTO address;
 
     private RoomDTO room;
+
+    private List<EventDTO> events;
 }
