@@ -77,27 +77,4 @@ public class TicketService {
 
         return ticketDTO;
     }
-
-    public PrintTicketDTO printTicket(UUID id) {
-        Optional<PrintTicketDTO> ticketInfos = ticketRepository.getPrintTicketInfos(id);
-        if (ticketInfos.isEmpty()){
-            throw new ResourceNotFoundException("ticket with ID " + id + " not found.");
-        }
-
-        PrintTicketDTO printTicketDTO = ticketInfos.get();
-
-        //formata data e hora
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String formattedPurchaseDate = ticketInfos.get().getPurchaseDate().format(formatter);
-        String formattedExhibitionDate = ticketInfos.get().getExhibitionDate().format(formatter);
-
-        /*printedTicket.setEstablishmentName();
-        printedTicket.setEventName();
-        printedTicket.setExhibitionDate();
-        printedTicket.setSeatNumber();
-        printedTicket.setUserName();
-        printedTicket.setPurchaseDate();*/
-
-        return printTicketDTO;
-    }
 }
