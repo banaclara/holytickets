@@ -1,5 +1,6 @@
 package br.com.holytickets.models;
 
+import br.com.holytickets.validation.UniqueEmail;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -28,7 +29,6 @@ public class User {
     @NotNull(message = "Email is required")
     private String email;
 
-    @JsonIgnore
     @NotNull(message = "Password is required")
     private String password;
 

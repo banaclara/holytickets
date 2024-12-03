@@ -13,4 +13,5 @@ import java.util.UUID;
 public interface EstablishmentRepository extends JpaRepository<Establishment, UUID> {
     Optional<Establishment> findByEmail(@Param("email") String email);
     List<Establishment> findByName(@Param("name") String name);
+    boolean existsByEmail(String email);
 }

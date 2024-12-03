@@ -1,5 +1,6 @@
 package br.com.holytickets.models;
 
+import br.com.holytickets.validation.UniqueEmail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
