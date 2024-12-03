@@ -15,7 +15,7 @@ import java.util.UUID;
 public class ScheduleDTO {
     private UUID id;
 
-    @Schema(example = "dd/mm/aaa HH:MM")
+    @Schema(example = "dd/mm/aaaa HH:MM")
     private String exhibitionDate;
 
     private UUID eventId;

@@ -1,6 +1,7 @@
 package br.com.holytickets.services;
 
 import br.com.holytickets.dto.EventDTO;
+import br.com.holytickets.dto.ExhibitionDateDTO;
 import br.com.holytickets.dto.ScheduleDTO;
 import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.models.Event;
@@ -60,15 +61,12 @@ public class ScheduleService {
         scheduleRepository.delete(schedule);
     }
 
-    public ScheduleDTO update(UUID id, ScheduleDTO scheduleDTO) {
+    public ScheduleDTO update(UUID id, ExhibitionDateDTO exhibitionDate) {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + id + " not found."));
 
-        schedule.setExhibitionDate(dateFormatter.convertStringToLocalDateTime(scheduleDTO.getExhibitionDate()));
-        if (scheduleDTO.getEventId() != null) {
-            EventDTO eventDTO = eventService.findByID(scheduleDTO.getEventId());
-            schedule.setEvent(converter.convertToEntity(eventDTO));
-        }
+        schedule.setExhibitionDate(dateFormatter.convertStringToLocalDateTime(exhibitionDate.getExhibitionDate()));
+        schedule.setEvent(schedule.getEvent());
 
         schedule = scheduleRepository.save(schedule);
         return converter.convertToDTO(schedule);
