@@ -19,10 +19,4 @@ public class UserService {
         User user = converter.convertToEntity(dto);
         return converter.convertToDTO(userRepository.save(user));
     }
-
-    public boolean validateCredentials(String email, String password) {
-        return userRepository.findByEmail(email)
-                .map(user -> passwordEncoder.matches(password, user.getPassword()))
-                .orElse(false);
-    }
 }
