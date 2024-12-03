@@ -1,5 +1,6 @@
 package br.com.holytickets.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class Schedule {
     @JoinColumn(name = "event_id", referencedColumnName = "id", nullable = false)
     private Event event;
 
-    @OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Seat> seats;
 }

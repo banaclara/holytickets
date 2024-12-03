@@ -21,25 +21,25 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/establishments/**").permitAll()
+                        .requestMatchers("/users/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/event/**").permitAll()
                         .requestMatchers("/room/**").permitAll()
                         .requestMatchers("/schedule/**").permitAll()
+                        .requestMatchers("/ticket/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-//
+
 //    @Bean
 //    public JwtAuthFilter jwtAuthenticationFilter() {
 //        return new JwtAuthenticationFilter(jwtUtil(), userDetailsService());

@@ -2,6 +2,7 @@ package br.com.holytickets.security;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import br.com.holytickets.services.AuthService;
 import br.com.holytickets.utils.JWTUtils;
@@ -47,7 +48,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
         DecodedJWT jwt = JWT.decode(token);
         String email = jwt.getSubject();
-        String role = authService.findRoleByEmail(email).orElse(null);
+        String id = jwt.getClaim("id").asString();
+        String role = jwt.getClaim("role").asString();
 
         if (email != null && role != null) {
             return new UsernamePasswordAuthenticationToken(email, null, List.of(() -> role));

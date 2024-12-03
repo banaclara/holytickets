@@ -2,15 +2,13 @@ package br.com.holytickets.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class SeatDTO {
+public class AuthDetails {
+    private String email;
     private UUID id;
-    private String seatNumber;
-    private UUID scheduleId;
+    private String role;
 }

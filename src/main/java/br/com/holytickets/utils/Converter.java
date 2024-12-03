@@ -2,13 +2,16 @@ package br.com.holytickets.utils;
 
 import br.com.holytickets.dto.*;
 import br.com.holytickets.models.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class Converter {
+    private final DateFormatter dateFormatter;
 
     public EventDTO convertToDTO(Event event) {
         EventDTO eventDTO = new EventDTO();
@@ -45,7 +48,7 @@ public class Converter {
     public ScheduleDTO convertToDTO(Schedule schedule) {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         scheduleDTO.setId((schedule.getId()));
-        scheduleDTO.setExhibitionDate(schedule.getExhibitionDate());
+        scheduleDTO.setExhibitionDate(dateFormatter.convertLocalDateTimeToString(schedule.getExhibitionDate()));
 
         if (schedule.getEvent() != null) {
             scheduleDTO.setEventId(schedule.getEvent().getId());
@@ -66,7 +69,7 @@ public class Converter {
     public Schedule convertToEntity(ScheduleDTO scheduleDTO) {
         Schedule schedule = new Schedule();
         schedule.setId(scheduleDTO.getId());
-        schedule.setExhibitionDate(scheduleDTO.getExhibitionDate());
+        schedule.setExhibitionDate(dateFormatter.convertStringToLocalDateTime(scheduleDTO.getExhibitionDate()));
         if (scheduleDTO.getEventId() != null) {
             Event event = new Event();
             event.setId(scheduleDTO.getEventId());
@@ -91,7 +94,11 @@ public class Converter {
                 establishment.getPassword(),
                 establishment.getContactNumber(),
                 convertToDTO(establishment.getAddress()),
-                convertToDTO(establishment.getRoom())
+                convertToDTO(establishment.getRoom()),
+                establishment.getEvents() != null ?
+                        establishment.getEvents().stream()
+                                .map(this::convertToDTO)
+                                .collect(Collectors.toList()) : Collections.emptyList()
         );
     }
 
@@ -113,7 +120,34 @@ public class Converter {
                 establishmentDTO.getPassword(),
                 establishmentDTO.getContactNumber(),
                 convertToEntity(establishmentDTO.getAddress()),
-                convertToEntity(establishmentDTO.getRoom())
+                convertToEntity(establishmentDTO.getRoom()),
+                establishmentDTO.getEvents() != null ?
+                        establishmentDTO.getEvents().stream()
+                                .map(this::convertToEntity)
+                                .collect(Collectors.toList()) : Collections.emptyList()
+        );
+    }
+
+    public Establishment convertToEntity(EstablishmentRegisterDTO establishmentDTO, AddressDTO addressDTO) {
+        return new Establishment(
+                establishmentDTO.getId(),
+                establishmentDTO.getName(),
+                establishmentDTO.getEmail(),
+                establishmentDTO.getPassword(),
+                establishmentDTO.getContactNumber(),
+                convertToEntity(addressDTO),
+                convertToEntity(establishmentDTO.getRoom()),
+                Collections.emptyList()
+        );
+    }
+
+    public AddressDTO mapCepToAddressDTO(CepDTO cepDTO, String number) {
+        return new AddressDTO(
+                cepDTO.getLogradouro(),
+                number,
+                cepDTO.getLocalidade(),
+                cepDTO.getUf(),
+                "Brasil"
         );
     }
 
@@ -157,34 +191,42 @@ public class Converter {
         return new TicketDTO(
                 ticket.getId(),
                 ticket.getPurchaseDate(),
-                convertToDTO(ticket.getUser()),
+                ticket.getUser().getId(),
                 convertToDTO(ticket.getSeat())
         );
     }
 
     public Ticket convertToEntity(TicketDTO ticketDTO) {
-        return new Ticket(
-                ticketDTO.getId(),
-                ticketDTO.getPurchaseDate(),
-                convertToEntity(ticketDTO.getUser()),
-                convertToEntity(ticketDTO.getSeat())
-        );
+        Ticket ticket = new Ticket();
+        ticket.setId(ticketDTO.getId());
+        ticket.setPurchaseDate(ticketDTO.getPurchaseDate());
+        if (ticketDTO.getUserId() != null) {
+            User user = new User();
+            user.setId(ticketDTO.getUserId());
+            ticket.setUser(user);
+        }
+        ticket.setSeat(convertToEntity(ticketDTO.getSeat()));
+        return ticket;
     }
 
     public SeatDTO convertToDTO(Seat seat) {
-        return new SeatDTO(
-                seat.getId(),
-                seat.getSeatNumber(),
-                convertToDTO(seat.getSchedule())
-        );
+        SeatDTO seatDTO = new SeatDTO();
+        seatDTO.setId(seat.getId());
+        seatDTO.setSeatNumber(seat.getSeatNumber());
+        seatDTO.setScheduleId(seat.getSchedule().getId());
+        return seatDTO;
     }
 
     public Seat convertToEntity(SeatDTO seatDTO) {
-        return new Seat(
-                seatDTO.getId(),
-                seatDTO.getSeatNumber(),
-                convertToEntity(seatDTO.getSchedule())
-        );
+        Seat seat = new Seat();
+        seat.setId(seatDTO.getId());
+        seat.setSeatNumber(seatDTO.getSeatNumber());
+        if (seatDTO.getScheduleId() != null) {
+            Schedule schedule = new Schedule();
+            schedule.setId(seatDTO.getScheduleId());
+            seat.setSchedule(schedule);
+        }
+        return seat;
     }
 
     public Room convertToEntity(RoomDTO roomDTO) {

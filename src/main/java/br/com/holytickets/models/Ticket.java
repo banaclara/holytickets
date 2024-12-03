@@ -20,7 +20,7 @@ public class Ticket {
 
     private LocalDateTime purchaseDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 

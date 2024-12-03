@@ -46,6 +46,4 @@ public class EstablishmentController {
         establishmentService.deleteStab(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }

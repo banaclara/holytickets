@@ -1,5 +1,6 @@
 package br.com.holytickets.controllers;
 
+import br.com.holytickets.models.Establishment;
 import br.com.holytickets.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,9 @@ public class RoomController {
         return ResponseEntity.ok(seatChart);
     }
 
-    @GetMapping("/{establishmentId}/{scheduleId}")
-    public ResponseEntity<Map<Character, String>> getAvailableSeatsChart(@PathVariable UUID establishmentId, @PathVariable UUID scheduleId) {
-        Map<Character, String> seatChart = roomService. getAvailableSeatsChart(establishmentId, scheduleId);
+    @GetMapping("/schedule/{scheduleId}")
+    public ResponseEntity<Map<Character, String>> getAvailableSeatsChart(@PathVariable UUID scheduleId) {
+        Map<Character, String> seatChart = roomService.getAvailableSeatsChart(scheduleId);
         return ResponseEntity.ok(seatChart);
     }
 }

@@ -1,19 +1,16 @@
 package br.com.holytickets.controllers;
 
-import br.com.holytickets.dto.EstablishmentDTO;
-import br.com.holytickets.dto.LoginCredentials;
-import br.com.holytickets.dto.UserDTO;
+import br.com.holytickets.dto.*;
 import br.com.holytickets.services.AuthService;
 import br.com.holytickets.services.EstablishmentService;
 import br.com.holytickets.services.UserService;
 import br.com.holytickets.utils.JWTUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,43 +23,27 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register/user")
-    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> registerUser(@RequestBody @Valid UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         UserDTO createdUser = userService.create(userDTO);
-        String token = jwtUtils.generateToken(createdUser.getEmail(), "USER");
+        String token = jwtUtils.generateToken(createdUser.getEmail(), createdUser.getId(), "USER");
         return ResponseEntity.ok(token);
     }
 
     @PostMapping("/register/establishment")
-    public ResponseEntity<String> registerEstablishment(@RequestBody @Valid EstablishmentDTO establishmentDTO) {
+    public ResponseEntity<String> registerEstablishment(@RequestBody @Valid EstablishmentRegisterDTO establishmentDTO) {
         establishmentDTO.setPassword(passwordEncoder.encode(establishmentDTO.getPassword()));
-
-        // Chama o serviço para registrar o estabelecimento
         EstablishmentDTO createdEstablishment = establishmentService.register(establishmentDTO);
-
-        // Geração do token JWT após o registro
-        String token = jwtUtils.generateToken(createdEstablishment.getEmail(), "ESTABLISHMENT");
-
+        String token = jwtUtils.generateToken(createdEstablishment.getEmail(), createdEstablishment.getId(), "ESTABLISHMENT");
         return ResponseEntity.ok(token);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginCredentials credentials) {
-        Optional<String> role = authService.findRoleByEmail(credentials.getEmail());
-        if (role.isEmpty()) {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
+    public ResponseEntity<String> login(@RequestBody @Valid LoginCredentials credentials) {
 
-        boolean isValid = role.get().equals("USER")
-                ? userService.validateCredentials(credentials.getEmail(), credentials.getPassword())
-                : establishmentService.validateCredentials(credentials.getEmail(), credentials.getPassword());
+        AuthDetails authDetails = authService.validateAuth(credentials.getEmail(), credentials.getPassword());
+        String token = jwtUtils.generateToken(credentials.getEmail(), authDetails.getId(), authDetails.getRole());
 
-        if (!isValid) {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
-
-        String token = jwtUtils.generateToken(credentials.getEmail(), role.get());
         return ResponseEntity.ok(token);
     }
 }
-
