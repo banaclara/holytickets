@@ -9,11 +9,10 @@ import br.com.holytickets.services.UserService;
 import br.com.holytickets.utils.JWTUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,7 +25,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register/user")
-    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> registerUser(@RequestBody @Valid UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         UserDTO createdUser = userService.create(userDTO);
         String token = jwtUtils.generateToken(createdUser.getEmail(), "USER");
@@ -42,22 +41,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginCredentials credentials) {
-        Optional<String> role = authService.findRoleByEmail(credentials.getEmail());
-        if (role.isEmpty()) {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
+    public ResponseEntity<String> login(@RequestBody @Valid LoginCredentials credentials) {
 
-        boolean isValid = role.get().equals("USER")
-                ? userService.validateCredentials(credentials.getEmail(), credentials.getPassword())
-                : establishmentService.validateCredentials(credentials.getEmail(), credentials.getPassword());
+        String role = authService.findRoleByEmail(credentials.getEmail());
 
-        if (!isValid) {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
+        boolean isValid = authService.validateCredentials(credentials.getEmail(), credentials.getPassword(), role);
+            String token = jwtUtils.generateToken(credentials.getEmail(), role);
+            return ResponseEntity.ok(token);
 
-        String token = jwtUtils.generateToken(credentials.getEmail(), role.get());
-        return ResponseEntity.ok(token);
     }
-}
 
+}

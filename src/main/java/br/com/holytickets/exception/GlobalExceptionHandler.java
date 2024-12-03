@@ -7,7 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<List<CustomError>> handleResourceNotFound(ResourceNotFoundException ex) {
         List<CustomError> errors = new ArrayList<>();
@@ -31,6 +29,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<List<CustomError>> handleInvalidCredentialsException(InvalidCredentialsException ex) {
+        List<CustomError> errors = new ArrayList<>();
+        errors.add(new CustomError("Error", ex.getMessage()));
+        return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<List<CustomError>> handleGlobalException(Exception ex) {
