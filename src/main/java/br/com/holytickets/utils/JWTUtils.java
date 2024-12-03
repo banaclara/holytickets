@@ -8,15 +8,17 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.UUID;
 
 @Component
 public class JWTUtils {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public String generateToken(String email, String role) {
+    public String generateToken(String email, UUID id, String role) {
         return JWT.create()
                 .withSubject(email)
+                .withClaim("id", id.toString())
                 .withClaim("role", role)
                 .withExpiresAt(expirationDate())
                 .sign(Algorithm.HMAC256(secretKey));
