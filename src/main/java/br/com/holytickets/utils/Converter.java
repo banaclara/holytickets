@@ -84,6 +84,7 @@ public class Converter {
     }
 
     public EstablishmentDTO convertToDTO(Establishment establishment) {
+        // Aqui você pode preencher o campo cep ou deixá-lo vazio se não necessário
         return new EstablishmentDTO(
                 establishment.getId(),
                 establishment.getName(),
@@ -91,7 +92,8 @@ public class Converter {
                 establishment.getPassword(),
                 establishment.getContactNumber(),
                 convertToDTO(establishment.getAddress()),
-                convertToDTO(establishment.getRoom())
+                convertToDTO(establishment.getRoom()),
+                ""
         );
     }
 
@@ -101,7 +103,8 @@ public class Converter {
                 address.getNumber(),
                 address.getCity(),
                 address.getState(),
-                address.getCountry()
+                address.getCountry(),
+                address.getCep()
         );
     }
 
@@ -123,7 +126,9 @@ public class Converter {
                 addressDTO.getNumber(),
                 addressDTO.getCity(),
                 addressDTO.getState(),
-                addressDTO.getCountry()
+                addressDTO.getCountry(),
+                addressDTO.getCep()
+
         );
     }
 

@@ -50,7 +50,6 @@ public class UserService {
                 throw new BadRequestException("Email is already in use by another user.");
             }
         }
-        
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
 

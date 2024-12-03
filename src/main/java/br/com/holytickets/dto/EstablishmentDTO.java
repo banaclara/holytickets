@@ -29,4 +29,8 @@ public class EstablishmentDTO {
     private AddressDTO address;
 
     private RoomDTO room;
+
+    @Pattern(regexp = "\\d{5}-?\\d{3}", message = "CEP must be valid (e.g., 12345-678).")
+    private String cep;
+
 }
