@@ -1,6 +1,5 @@
 package br.com.holytickets.client;
 
-import br.com.holytickets.dto.AddressDTO;
 import br.com.holytickets.dto.CepDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

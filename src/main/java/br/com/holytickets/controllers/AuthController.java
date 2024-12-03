@@ -1,9 +1,6 @@
 package br.com.holytickets.controllers;
 
-import br.com.holytickets.dto.AuthDetails;
-import br.com.holytickets.dto.EstablishmentDTO;
-import br.com.holytickets.dto.LoginCredentials;
-import br.com.holytickets.dto.UserDTO;
+import br.com.holytickets.dto.*;
 import br.com.holytickets.services.AuthService;
 import br.com.holytickets.services.EstablishmentService;
 import br.com.holytickets.services.UserService;
@@ -34,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/register/establishment")
-    public ResponseEntity<String> registerEstablishment(@RequestBody @Valid EstablishmentDTO establishmentDTO) {
+    public ResponseEntity<String> registerEstablishment(@RequestBody @Valid EstablishmentRegisterDTO establishmentDTO) {
         establishmentDTO.setPassword(passwordEncoder.encode(establishmentDTO.getPassword()));
         EstablishmentDTO createdEstablishment = establishmentService.register(establishmentDTO);
         String token = jwtUtils.generateToken(createdEstablishment.getEmail(), createdEstablishment.getId(), "ESTABLISHMENT");

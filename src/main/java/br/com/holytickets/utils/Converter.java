@@ -84,7 +84,6 @@ public class Converter {
     }
 
     public EstablishmentDTO convertToDTO(Establishment establishment) {
-        // Aqui você pode preencher o campo cep ou deixá-lo vazio se não necessário
         return new EstablishmentDTO(
                 establishment.getId(),
                 establishment.getName(),
@@ -92,8 +91,7 @@ public class Converter {
                 establishment.getPassword(),
                 establishment.getContactNumber(),
                 convertToDTO(establishment.getAddress()),
-                convertToDTO(establishment.getRoom()),
-                ""
+                convertToDTO(establishment.getRoom())
         );
     }
 
@@ -103,8 +101,7 @@ public class Converter {
                 address.getNumber(),
                 address.getCity(),
                 address.getState(),
-                address.getCountry(),
-                address.getCep()
+                address.getCountry()
         );
     }
 
@@ -120,15 +117,35 @@ public class Converter {
         );
     }
 
+    public Establishment convertToEntity(EstablishmentRegisterDTO establishmentDTO, AddressDTO addressDTO) {
+        return new Establishment(
+                establishmentDTO.getId(),
+                establishmentDTO.getName(),
+                establishmentDTO.getEmail(),
+                establishmentDTO.getPassword(),
+                establishmentDTO.getContactNumber(),
+                convertToEntity(addressDTO),
+                convertToEntity(establishmentDTO.getRoom())
+        );
+    }
+
+    public AddressDTO mapCepToAddressDTO(CepDTO cepDTO) {
+        return new AddressDTO(
+                cepDTO.getLogradouro(),  // street
+                "S/N",                   // Número fixo; ajuste conforme necessário
+                cepDTO.getLocalidade(),  // city
+                cepDTO.getUf(),          // state
+                "Brazil"
+        );
+    }
+
     public Address convertToEntity(AddressDTO addressDTO) {
         return new Address(
                 addressDTO.getStreet(),
                 addressDTO.getNumber(),
                 addressDTO.getCity(),
                 addressDTO.getState(),
-                addressDTO.getCountry(),
-                addressDTO.getCep()
-
+                addressDTO.getCountry()
         );
     }
 

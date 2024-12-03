@@ -24,5 +24,4 @@ public class Address {
 
     @Size(min = 2, message = "Country name must contain at least 2 characters")
     private String country;
-    private String cep;
 }

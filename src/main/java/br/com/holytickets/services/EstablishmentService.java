@@ -4,6 +4,7 @@ import br.com.holytickets.client.ViaCepClient;
 import br.com.holytickets.dto.AddressDTO;
 import br.com.holytickets.dto.CepDTO;
 import br.com.holytickets.dto.EstablishmentDTO;
+import br.com.holytickets.dto.EstablishmentRegisterDTO;
 import br.com.holytickets.exception.ConflictException;
 import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.models.Establishment;
@@ -22,10 +23,9 @@ public class EstablishmentService {
 
     private final EstablishmentRepository establishmentRepository;
     private final Converter converter;
-    private final PasswordEncoder passwordEncoder;
-    private final ViaCepClient viaCepClient; // Dependência para o cliente do ViaCEP
+    private final ViaCepClient viaCepClient;
 
-    public EstablishmentDTO register(EstablishmentDTO dto) {
+    public EstablishmentDTO register(EstablishmentRegisterDTO dto) {
         if (!establishmentRepository.findByName(dto.getName()).isEmpty()) {
             throw new ConflictException("An establishment with the name " + dto.getName() + " already exists.");
         }
@@ -49,11 +49,10 @@ public class EstablishmentService {
         }
 
         // Mapeia o endereço e atualiza o DTO
-        AddressDTO addressDTO = mapCepToAddressDTO(cepDTO);
-        dto.setAddress(addressDTO);
+        AddressDTO addressDTO = converter.mapCepToAddressDTO(cepDTO);
 
         // Salva o estabelecimento
-        Establishment establishment = converter.convertToEntity(dto);
+        Establishment establishment = converter.convertToEntity(dto, addressDTO);
         return converter.convertToDTO(establishmentRepository.save(establishment));
     }
 
@@ -90,25 +89,12 @@ public class EstablishmentService {
         Establishment establishment = establishmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Establishment with ID " + id + " not found."));
 
-        // Atualiza os dados do estabelecimento
         establishment.setName(establishmentDTO.getName());
         establishment.setEmail(establishmentDTO.getEmail());
         establishment.setContactNumber(establishmentDTO.getContactNumber());
 
-        // Busca o endereço baseado no cep, se o cep foi modificado
-        String cep = establishmentDTO.getCep();
-        CepDTO cepDTO = viaCepClient.buscarEnderecoPorCep(cep);
-
-        if (cepDTO == null || cepDTO.getLogradouro() == null) {
-            throw new ResourceNotFoundException("Invalid CEP: No address found for CEP " + cep);
-        }
-
-        // Mapeia e atualiza o endereço no DTO
-        AddressDTO addressDTO = mapCepToAddressDTO(cepDTO);
-        establishmentDTO.setAddress(addressDTO);
-
-        // Salva o estabelecimento atualizado
         Establishment updatedEstablishment = establishmentRepository.save(establishment);
+
         return converter.convertToDTO(updatedEstablishment);
     }
 
@@ -118,17 +104,4 @@ public class EstablishmentService {
 
         establishmentRepository.delete(establishment);
     }
-
-    // Método utilitário para converter CepDTO em AddressDTO
-    private AddressDTO mapCepToAddressDTO(CepDTO cepDTO) {
-        return new AddressDTO(
-                cepDTO.getLogradouro(),  // street
-                "S/N",                   // Número fixo; ajuste conforme necessário
-                cepDTO.getLocalidade(),  // city
-                cepDTO.getUf(),          // state
-                "Brazil",
-                cepDTO.getCep()
-        );
-    }
-
 }

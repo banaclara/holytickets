@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Data
-public class EstablishmentDTO {
+public class EstablishmentRegisterDTO {
     private UUID id;
 
     @NotBlank(message = "Name cannot be empty.")
@@ -26,7 +26,7 @@ public class EstablishmentDTO {
     @NotBlank(message = "Contact number cannot be empty.")
     private String contactNumber;
 
-    private AddressDTO address;
+    private String cep;
 
     private RoomDTO room;
 }
