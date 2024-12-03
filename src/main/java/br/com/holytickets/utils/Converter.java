@@ -91,7 +91,11 @@ public class Converter {
                 establishment.getPassword(),
                 establishment.getContactNumber(),
                 convertToDTO(establishment.getAddress()),
-                convertToDTO(establishment.getRoom())
+                convertToDTO(establishment.getRoom()),
+                establishment.getEvents() != null ?
+                        establishment.getEvents().stream()
+                                .map(this::convertToDTO)
+                                .collect(Collectors.toList()) : Collections.emptyList()
         );
     }
 
@@ -113,7 +117,11 @@ public class Converter {
                 establishmentDTO.getPassword(),
                 establishmentDTO.getContactNumber(),
                 convertToEntity(establishmentDTO.getAddress()),
-                convertToEntity(establishmentDTO.getRoom())
+                convertToEntity(establishmentDTO.getRoom()),
+                establishmentDTO.getEvents() != null ?
+                        establishmentDTO.getEvents().stream()
+                                .map(this::convertToEntity)
+                                .collect(Collectors.toList()) : Collections.emptyList()
         );
     }
 
@@ -125,7 +133,8 @@ public class Converter {
                 establishmentDTO.getPassword(),
                 establishmentDTO.getContactNumber(),
                 convertToEntity(addressDTO),
-                convertToEntity(establishmentDTO.getRoom())
+                convertToEntity(establishmentDTO.getRoom()),
+                Collections.emptyList()
         );
     }
 

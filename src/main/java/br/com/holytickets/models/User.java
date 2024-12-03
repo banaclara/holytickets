@@ -1,7 +1,5 @@
 package br.com.holytickets.models;
 
-import br.com.holytickets.validation.UniqueEmail;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,7 +32,6 @@ public class User {
     @NotNull(message = "Password is required")
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 }
