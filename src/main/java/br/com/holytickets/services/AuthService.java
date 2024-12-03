@@ -36,7 +36,7 @@ public class AuthService {
             isValid = establishmentService.validateCredentials(email, password);
         }
         if(!isValid){
-            throw new InvalidCredentialsException("Invalid Credentials");
+            throw new InvalidCredentialsException("Invalid Credentials: Email or Password");
         }
         return isValid;
     }
