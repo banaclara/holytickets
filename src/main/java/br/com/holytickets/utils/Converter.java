@@ -2,13 +2,16 @@ package br.com.holytickets.utils;
 
 import br.com.holytickets.dto.*;
 import br.com.holytickets.models.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class Converter {
+    private final DateFormatter dateFormatter;
 
     public EventDTO convertToDTO(Event event) {
         EventDTO eventDTO = new EventDTO();
@@ -45,7 +48,7 @@ public class Converter {
     public ScheduleDTO convertToDTO(Schedule schedule) {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         scheduleDTO.setId((schedule.getId()));
-        scheduleDTO.setExhibitionDate(schedule.getExhibitionDate());
+        scheduleDTO.setExhibitionDate(dateFormatter.convertLocalDateTimeToString(schedule.getExhibitionDate()));
 
         if (schedule.getEvent() != null) {
             scheduleDTO.setEventId(schedule.getEvent().getId());
@@ -66,7 +69,7 @@ public class Converter {
     public Schedule convertToEntity(ScheduleDTO scheduleDTO) {
         Schedule schedule = new Schedule();
         schedule.setId(scheduleDTO.getId());
-        schedule.setExhibitionDate(scheduleDTO.getExhibitionDate());
+        schedule.setExhibitionDate(dateFormatter.convertStringToLocalDateTime(scheduleDTO.getExhibitionDate()));
         if (scheduleDTO.getEventId() != null) {
             Event event = new Event();
             event.setId(scheduleDTO.getEventId());
@@ -91,7 +94,11 @@ public class Converter {
                 establishment.getPassword(),
                 establishment.getContactNumber(),
                 convertToDTO(establishment.getAddress()),
-                convertToDTO(establishment.getRoom())
+                convertToDTO(establishment.getRoom()),
+                establishment.getEvents() != null ?
+                        establishment.getEvents().stream()
+                                .map(this::convertToDTO)
+                                .collect(Collectors.toList()) : Collections.emptyList()
         );
     }
 
@@ -113,7 +120,34 @@ public class Converter {
                 establishmentDTO.getPassword(),
                 establishmentDTO.getContactNumber(),
                 convertToEntity(establishmentDTO.getAddress()),
-                convertToEntity(establishmentDTO.getRoom())
+                convertToEntity(establishmentDTO.getRoom()),
+                establishmentDTO.getEvents() != null ?
+                        establishmentDTO.getEvents().stream()
+                                .map(this::convertToEntity)
+                                .collect(Collectors.toList()) : Collections.emptyList()
+        );
+    }
+
+    public Establishment convertToEntity(EstablishmentRegisterDTO establishmentDTO, AddressDTO addressDTO) {
+        return new Establishment(
+                establishmentDTO.getId(),
+                establishmentDTO.getName(),
+                establishmentDTO.getEmail(),
+                establishmentDTO.getPassword(),
+                establishmentDTO.getContactNumber(),
+                convertToEntity(addressDTO),
+                convertToEntity(establishmentDTO.getRoom()),
+                Collections.emptyList()
+        );
+    }
+
+    public AddressDTO mapCepToAddressDTO(CepDTO cepDTO, String number) {
+        return new AddressDTO(
+                cepDTO.getLogradouro(),
+                number,
+                cepDTO.getLocalidade(),
+                cepDTO.getUf(),
+                "Brasil"
         );
     }
 

@@ -1,6 +1,10 @@
 package br.com.holytickets.services;
 
+import br.com.holytickets.dto.UpdateUserDTO;
 import br.com.holytickets.dto.UserDTO;
+
+import br.com.holytickets.exception.BadRequestException;
+
 import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.models.User;
 import br.com.holytickets.repositories.UserRepository;
@@ -39,9 +43,15 @@ public class UserService {
         return converter.convertToDTO(user);
     }
 
-    public UserDTO update(UUID id, UserDTO userDTO) {
+    public UserDTO update(UUID id, UpdateUserDTO userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found."));
+
+        if (!user.getEmail().equals(userDTO.getEmail())) {
+            if (userRepository.existsByEmail(userDTO.getEmail())) {
+                throw new BadRequestException("Email is already in use by another user.");
+            }
+        }
 
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());

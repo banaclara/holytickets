@@ -1,12 +1,14 @@
 package br.com.holytickets.services;
 
 import br.com.holytickets.dto.EventDTO;
+import br.com.holytickets.dto.ExhibitionDateDTO;
 import br.com.holytickets.dto.ScheduleDTO;
 import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.models.Event;
 import br.com.holytickets.models.Schedule;
 import br.com.holytickets.repositories.ScheduleRepository;
 import br.com.holytickets.utils.Converter;
+import br.com.holytickets.utils.DateFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final Converter converter;
     private final EventService eventService;
+    private final DateFormatter dateFormatter;
 
     public ScheduleDTO register(ScheduleDTO scheduleDTO) {
         if (scheduleDTO.getEventId() == null) {
@@ -58,15 +61,12 @@ public class ScheduleService {
         scheduleRepository.delete(schedule);
     }
 
-    public ScheduleDTO update(UUID id, ScheduleDTO scheduleDTO) {
+    public ScheduleDTO update(UUID id, ExhibitionDateDTO exhibitionDate) {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule with ID " + id + " not found."));
 
-        schedule.setExhibitionDate(scheduleDTO.getExhibitionDate());
-        if (scheduleDTO.getEventId() != null) {
-            EventDTO eventDTO = eventService.findByID(scheduleDTO.getEventId());
-            schedule.setEvent(converter.convertToEntity(eventDTO));
-        }
+        schedule.setExhibitionDate(dateFormatter.convertStringToLocalDateTime(exhibitionDate.getExhibitionDate()));
+        schedule.setEvent(schedule.getEvent());
 
         schedule = scheduleRepository.save(schedule);
         return converter.convertToDTO(schedule);

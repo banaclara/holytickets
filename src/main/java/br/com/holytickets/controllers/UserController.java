@@ -1,5 +1,6 @@
 package br.com.holytickets.controllers;
 
+import br.com.holytickets.dto.UpdateUserDTO;
 import br.com.holytickets.dto.UserDTO;
 import br.com.holytickets.services.UserService;
 import jakarta.validation.Valid;
@@ -29,7 +30,9 @@ public class UserController {
     }
 
     @PutMapping("/editUser/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable UUID id, @RequestBody @Valid UserDTO userDTO) {
+
+    public ResponseEntity<UserDTO> update(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO userDTO) {
+
         UserDTO updated = userService.update(id, userDTO);
         return ResponseEntity.ok(updated);
     }

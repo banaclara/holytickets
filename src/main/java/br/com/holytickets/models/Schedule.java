@@ -29,6 +29,6 @@ public class Schedule {
     private Event event;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Seat> seats;
 }
