@@ -18,14 +18,11 @@ public class UserDTO {
     private UUID id;
     @NotBlank(message = "User name cannot be empty.")
     private String name;
-
     @UniqueEmail
     @NotBlank(message = "User email cannot be empty.")
     private String email;
-
     @NotBlank(message = "User password cannot be empty.")
     @Size(min = 8, message = "Password must be at least 8 characters long.")
     private String password;
-
     private List<TicketDTO> tickets;
 }

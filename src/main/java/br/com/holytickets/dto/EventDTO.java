@@ -13,19 +13,14 @@ import java.util.UUID;
 @AllArgsConstructor
 public class EventDTO {
     private UUID id;
-
     @NotBlank(message = "Event title cannot be empty.")
     @Size(max = 100, message = "Event title cannot be longer than 100 characters.")
     private String title;
-
     @NotBlank(message = "Director name cannot be empty.")
     private String director;
-
     @NotBlank(message = "Casting cannot be empty.")
     private String casting;
-
     @NotBlank(message = "Event description cannot be empty.")
     private String description;
-
     private UUID establishmentId;
 }

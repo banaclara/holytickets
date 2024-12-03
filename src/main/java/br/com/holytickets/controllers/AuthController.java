@@ -42,13 +42,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid LoginCredentials credentials) {
-
         String role = authService.findRoleByEmail(credentials.getEmail());
-
-        boolean isValid = authService.validateCredentials(credentials.getEmail(), credentials.getPassword(), role);
-            String token = jwtUtils.generateToken(credentials.getEmail(), role);
-            return ResponseEntity.ok(token);
-
+        authService.validateCredentials(credentials.getEmail(), credentials.getPassword(), role);
+        String token = jwtUtils.generateToken(credentials.getEmail(), role);
+        return ResponseEntity.ok(token);
     }
-
 }

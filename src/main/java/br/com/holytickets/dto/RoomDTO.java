@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class RoomDTO {
     @NotBlank(message = "Room must have at least one column")
     private int columns;
-
     @NotBlank(message = "Room must have 1 to 26 rows")
     private int rows;
 }

@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-
     private final ScheduleRepository scheduleRepository;
     private final Converter converter;
     private final EventService eventService;

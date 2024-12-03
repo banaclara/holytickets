@@ -13,7 +13,6 @@ import java.util.UUID;
 @RequestMapping("/ticket")
 @RequiredArgsConstructor
 public class TicketController {
-
     private final TicketService ticketService;
 
     @PostMapping("/sell")

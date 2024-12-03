@@ -16,18 +16,20 @@ import java.util.UUID;
 @RequestMapping("/event")
 @RequiredArgsConstructor
 public class EventController {
-
     private final EventService eventService;
+
     @PostMapping("/register")
     public ResponseEntity<EventDTO> register(@Valid @RequestBody EventDTO eventDTO) {
         EventDTO createdEvent = eventService.register(eventDTO);
         return ResponseEntity.ok(createdEvent);
     }
+
     @GetMapping("/list")
     public ResponseEntity<List<EventDTO>> listAll() {
         List<EventDTO> events = eventService.listAll();
         return ResponseEntity.ok(events);
     }
+
     @GetMapping("/findById/{id}")
     public ResponseEntity<EventDTO> findByID(@PathVariable UUID id) {
         EventDTO eventDTO = eventService.findByID(id);
@@ -45,6 +47,7 @@ public class EventController {
         EventDTO updatedEvent = eventService.update(id, eventDTO);
         return ResponseEntity.ok(updatedEvent);
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable UUID id) {
         eventService.deleteEvent(id);
