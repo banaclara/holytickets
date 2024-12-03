@@ -157,18 +157,22 @@ public class Converter {
         return new TicketDTO(
                 ticket.getId(),
                 ticket.getPurchaseDate(),
-                convertToDTO(ticket.getUser()),
+                ticket.getUser().getId(),
                 convertToDTO(ticket.getSeat())
         );
     }
 
     public Ticket convertToEntity(TicketDTO ticketDTO) {
-        return new Ticket(
-                ticketDTO.getId(),
-                ticketDTO.getPurchaseDate(),
-                convertToEntity(ticketDTO.getUser()),
-                convertToEntity(ticketDTO.getSeat())
-        );
+        Ticket ticket = new Ticket();
+        ticket.setId(ticketDTO.getId());
+        ticket.setPurchaseDate(ticketDTO.getPurchaseDate());
+        if (ticketDTO.getUserId() != null) {
+            User user = new User();
+            user.setId(ticketDTO.getUserId());
+            ticket.setUser(user);
+        }
+        ticket.setSeat(convertToEntity(ticketDTO.getSeat()));
+        return ticket;
     }
 
     public SeatDTO convertToDTO(Seat seat) {

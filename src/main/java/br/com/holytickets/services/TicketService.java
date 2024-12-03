@@ -1,9 +1,6 @@
 package br.com.holytickets.services;
 
-import br.com.holytickets.dto.ScheduleDTO;
-import br.com.holytickets.dto.SeatDTO;
-import br.com.holytickets.dto.TicketDTO;
-import br.com.holytickets.dto.UserDTO;
+import br.com.holytickets.dto.*;
 import br.com.holytickets.exception.BadRequestException;
 import br.com.holytickets.exception.ResourceNotFoundException;
 import br.com.holytickets.models.Schedule;
@@ -18,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,8 +50,7 @@ public class TicketService {
 
 
         //verificar se o user existe
-        UserDTO userDTO = ticketDTO.getUser();
-        UUID userId = userDTO.getId();
+        UUID userId = ticketDTO.getUserId();
         if (userId == null) {
             throw new BadRequestException("The user ID was not provided.");
         }
@@ -69,8 +66,8 @@ public class TicketService {
 
         ticketDTO.setSeat(converter.convertToDTO(seat));
 
-        userDTO = converter.convertToDTO(user);
-        ticketDTO.setUser(userDTO);
+        UserDTO userDTO = converter.convertToDTO(user);
+        ticketDTO.setUserId(userDTO.getId());
 
         Ticket ticket = converter.convertToEntity(ticketDTO);
         ticket = ticketRepository.save(ticket);
@@ -79,5 +76,28 @@ public class TicketService {
 
 
         return ticketDTO;
+    }
+
+    public PrintTicketDTO printTicket(UUID id) {
+        Optional<PrintTicketDTO> ticketInfos = ticketRepository.getPrintTicketInfos(id);
+        if (ticketInfos.isEmpty()){
+            throw new ResourceNotFoundException("ticket with ID " + id + " not found.");
+        }
+
+        PrintTicketDTO printTicketDTO = ticketInfos.get();
+
+        //formata data e hora
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String formattedPurchaseDate = ticketInfos.get().getPurchaseDate().format(formatter);
+        String formattedExhibitionDate = ticketInfos.get().getExhibitionDate().format(formatter);
+
+        /*printedTicket.setEstablishmentName();
+        printedTicket.setEventName();
+        printedTicket.setExhibitionDate();
+        printedTicket.setSeatNumber();
+        printedTicket.setUserName();
+        printedTicket.setPurchaseDate();*/
+
+        return printTicketDTO;
     }
 }
